@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Street Presidents: Batalla por Palacio</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #222, #444);
+      color: white;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    canvas {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/6/60/Plaza_Mayor_de_Lima_-_Panoramio_%2810%29.jpg') center/cover no-repeat;
+      display: block;
+      margin: 20px auto;
+      border: 4px solid gold;
+    }
+
+    #title {
+      font-size: 24px;
+      margin-top: 10px;
+      color: gold;
+    }
+
+    #instructions {
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div id="title">🕹️ Street Presidents: Batalla por Palacio 🏛️</div>
+  <div id="instructions">Usa A/D para moverte, W para saltar, S para atacar. Gana el combate y obtén la presidencia.</div>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const player = { x: 150, y: 300, color: 'blue', hp: 100, dir: 1 };
+    const enemy  = { x: 600, y: 300, color: 'red', hp: 100, dir: -1 };
+    const keys = {};
+
+    document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+    document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+    function drawFighter(f) {
+      ctx.fillStyle = f.color;
+      ctx.fillRect(f.x - 25, f.y - 50, 50, 50);
+      ctx.fillStyle = 'lime';
+      ctx.fillRect(f.x - 30, f.y - 60, f.hp / 2, 5);
+    }
+
+    function hit(p1, p2) {
+      if (Math.abs(p1.x - p2.x) < 50) {
+        p2.hp -= 5;
+      }
+    }
+
+    function update() {
+      // Movimiento del jugador
+      if (keys['a']) player.x -= 5;
+      if (keys['d']) player.x += 5;
+      if (keys['s']) hit(player, enemy);
+
+      // Movimiento simple del enemigo
+      if (enemy.x > player.x + 60) enemy.x -= 2;
+      else if (enemy.x < player.x - 60) enemy.x += 2;
+      else if (Math.random() < 0.02) hit(enemy, player);
+
+      // Limitar bordes
+      player.x = Math.max(50, Math.min(750, player.x));
+      enemy.x  = Math.max(50, Math.min(750, enemy.x));
+
+      // Dibujar
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawFighter(player);
+      drawFighter(enemy);
+
+      // Mostrar resultado
+      if (player.hp <= 0 || enemy.hp <= 0) {
+        ctx.fillStyle = 'white';
+        ctx.font = '30px Arial';
+        ctx.fillText(
+          player.hp > enemy.hp ? '🏆 ¡Ganaste la Presidencia!' : '😵 Derrota...',
+          200, 200
+        );
+        return;
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    update();
+  </script>
+</body>
+</html>
