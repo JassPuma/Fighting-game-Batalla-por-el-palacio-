@@ -7,23 +7,28 @@
   <style>
     body {
       margin: 0;
-      background: #222;
+      background: #1a1a1a;
       overflow: hidden;
-      font-family: Arial, sans-serif;
       color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 10px;
     }
 
     #gameCanvas {
       display: block;
-      margin: 0 auto;
-      background: linear-gradient(to bottom, #3a3a3a, #111);
+      margin: 10px auto;
+      background: linear-gradient(to top, #3a3a3a, #111);
       border: 3px solid #fff;
     }
 
     .life-bar-container {
       width: 45%;
       height: 20px;
-      background-color: #444;
+      background-color: #333;
       border: 2px solid white;
       position: absolute;
       top: 10px;
@@ -41,11 +46,7 @@
       height: 100%;
       width: 100%;
       background-color: limegreen;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 10px;
+      transition: width 0.3s;
     }
   </style>
 </head>
@@ -65,48 +66,51 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const gravity = 0.8;
+    const gravity = 0.6;
+    const groundLevel = 300;
 
     class Fighter {
-      constructor({ x, color, leftKeys, rightKeys, name }) {
+      constructor({ x, color, controls, name }) {
         this.x = x;
-        this.y = 0;
+        this.y = groundLevel;
         this.width = 50;
         this.height = 100;
         this.color = color;
         this.velocityY = 0;
-        this.isJumping = false;
         this.health = 100;
         this.isBlocking = false;
+        this.isJumping = false;
         this.name = name;
-        this.leftKeys = leftKeys;
-        this.rightKeys = rightKeys;
+        this.controls = controls;
       }
 
       draw() {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, canvas.height - this.height - this.y, this.width, this.height);
+        ctx.fillRect(this.x, this.y, this.width, this.height);
       }
 
       update() {
-        this.y -= this.velocityY;
-        this.velocityY -= gravity;
-        if (this.y < 0) {
-          this.y = 0;
+        // Aplicar gravedad
+        if (this.y < groundLevel) {
+          this.velocityY += gravity;
+          this.y += this.velocityY;
+        } else {
+          this.velocityY = 0;
+          this.y = groundLevel;
           this.isJumping = false;
         }
         this.draw();
       }
 
-      move(direction) {
-        const speed = 8;
-        if (direction === "left" && this.x > 0) this.x -= speed;
-        if (direction === "right" && this.x < canvas.width - this.width) this.x += speed;
+      move(dir) {
+        const speed = 6;
+        if (dir === "left" && this.x > 0) this.x -= speed;
+        if (dir === "right" && this.x < canvas.width - this.width) this.x += speed;
       }
 
       jump() {
         if (!this.isJumping) {
-          this.velocityY = 15;
+          this.velocityY = -15;
           this.isJumping = true;
         }
       }
@@ -116,46 +120,53 @@
           this.x + this.width > opponent.x &&
           this.x < opponent.x + opponent.width
         ) {
-          if (!opponent.isBlocking) opponent.health -= 10;
+          if (!opponent.isBlocking) {
+            opponent.health -= 10;
+          }
         }
       }
 
       block() {
         this.isBlocking = true;
-        setTimeout(() => (this.isBlocking = false), 500);
+        setTimeout(() => (this.isBlocking = false), 400);
       }
     }
 
-    const player1 = new Fighter({
+    const alan = new Fighter({
       x: 100,
       color: "red",
-      leftKeys: { left: "a", right: "d", jump: "w", attack: "s", block: "q" },
-      rightKeys: {},
+      controls: { left: "a", right: "d", jump: "w", attack: "s", block: "q" },
       name: "Alan García",
     });
 
-    const player2 = new Fighter({
+    const keiko = new Fighter({
       x: 700,
       color: "blue",
-      leftKeys: {},
-      rightKeys: { left: "ArrowLeft", right: "ArrowRight", jump: "ArrowUp", attack: "ArrowDown", block: "Enter" },
+      controls: { left: "ArrowLeft", right: "ArrowRight", jump: "ArrowUp", attack: "ArrowDown", block: "Enter" },
       name: "Keiko Fujimori",
     });
 
+    const fighters = [alan, keiko];
+
     function updateGame() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      player1.update();
-      player2.update();
 
-      document.getElementById("p1-bar").style.width = player1.health + "%";
-      document.getElementById("p2-bar").style.width = player2.health + "%";
+      // Dibujar suelo
+      ctx.fillStyle = "#555";
+      ctx.fillRect(0, groundLevel + 100, canvas.width, 10);
 
-      if (player1.health <= 0 || player2.health <= 0) {
+      alan.update();
+      keiko.update();
+
+      document.getElementById("p1-bar").style.width = alan.health + "%";
+      document.getElementById("p2-bar").style.width = keiko.health + "%";
+
+      if (alan.health <= 0 || keiko.health <= 0) {
         ctx.fillStyle = "yellow";
         ctx.font = "40px Arial";
         ctx.fillText(
-          `${player1.health <= 0 ? player2.name : player1.name} gana la presidencia!`,
-          180,
+          `${alan.health <= 0 ? keiko.name : alan.name} gana la presidencia!`,
+          200,
           200
         );
         return;
@@ -164,24 +175,20 @@
       requestAnimationFrame(updateGame);
     }
 
-    const keys = {};
-
     window.addEventListener("keydown", (e) => {
-      keys[e.key] = true;
+      // Alan
+      if (e.key === alan.controls.left) alan.move("left");
+      if (e.key === alan.controls.right) alan.move("right");
+      if (e.key === alan.controls.jump) alan.jump();
+      if (e.key === alan.controls.attack) alan.attack(keiko);
+      if (e.key === alan.controls.block) alan.block();
 
-      // Player 1 controls
-      if (e.key === player1.leftKeys.left) player1.move("left");
-      if (e.key === player1.leftKeys.right) player1.move("right");
-      if (e.key === player1.leftKeys.jump) player1.jump();
-      if (e.key === player1.leftKeys.attack) player1.attack(player2);
-      if (e.key === player1.leftKeys.block) player1.block();
-
-      // Player 2 controls
-      if (e.key === player2.rightKeys.left) player2.move("left");
-      if (e.key === player2.rightKeys.right) player2.move("right");
-      if (e.key === player2.rightKeys.jump) player2.jump();
-      if (e.key === player2.rightKeys.attack) player2.attack(player1);
-      if (e.key === player2.rightKeys.block) player2.block();
+      // Keiko
+      if (e.key === keiko.controls.left) keiko.move("left");
+      if (e.key === keiko.controls.right) keiko.move("right");
+      if (e.key === keiko.controls.jump) keiko.jump();
+      if (e.key === keiko.controls.attack) keiko.attack(alan);
+      if (e.key === keiko.controls.block) keiko.block();
     });
 
     updateGame();
