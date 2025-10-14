@@ -1,102 +1,190 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Street Presidents: Batalla por Palacio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batalla por el Palacio</title>
   <style>
     body {
       margin: 0;
-      background: linear-gradient(to bottom, #222, #444);
-      color: white;
-      font-family: 'Courier New', monospace;
-      text-align: center;
+      background: #222;
       overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: white;
     }
 
-    canvas {
-      background: url('https://upload.wikimedia.org/wikipedia/commons/6/60/Plaza_Mayor_de_Lima_-_Panoramio_%2810%29.jpg') center/cover no-repeat;
+    #gameCanvas {
       display: block;
-      margin: 20px auto;
-      border: 4px solid gold;
+      margin: 0 auto;
+      background: linear-gradient(to bottom, #3a3a3a, #111);
+      border: 3px solid #fff;
     }
 
-    #title {
-      font-size: 24px;
+    .life-bar-container {
+      width: 45%;
+      height: 20px;
+      background-color: #444;
+      border: 2px solid white;
+      position: absolute;
+      top: 10px;
+    }
+
+    #player1-life {
+      left: 20px;
+    }
+
+    #player2-life {
+      right: 20px;
+    }
+
+    .life-bar {
+      height: 100%;
+      width: 100%;
+      background-color: limegreen;
+    }
+
+    h1 {
+      text-align: center;
       margin-top: 10px;
-      color: gold;
-    }
-
-    #instructions {
-      font-size: 14px;
-      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <div id="title">🕹️ Street Presidents: Batalla por Palacio 🏛️</div>
-  <div id="instructions">Usa A/D para moverte, W para saltar, S para atacar. Gana el combate y obtén la presidencia.</div>
-  <canvas id="gameCanvas" width="800" height="400"></canvas>
+  <h1>🇵🇪 Batalla por el Palacio 🇵🇪</h1>
+
+  <div class="life-bar-container" id="player1-life">
+    <div class="life-bar" id="p1-bar"></div>
+  </div>
+  <div class="life-bar-container" id="player2-life">
+    <div class="life-bar" id="p2-bar"></div>
+  </div>
+
+  <canvas id="gameCanvas" width="900" height="400"></canvas>
 
   <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-    const player = { x: 150, y: 300, color: 'blue', hp: 100, dir: 1 };
-    const enemy  = { x: 600, y: 300, color: 'red', hp: 100, dir: -1 };
-    const keys = {};
+    const gravity = 0.8;
 
-    document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
-    document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+    class Fighter {
+      constructor({ x, color, leftKeys, rightKeys, name }) {
+        this.x = x;
+        this.y = 0;
+        this.width = 50;
+        this.height = 100;
+        this.color = color;
+        this.velocityY = 0;
+        this.isJumping = false;
+        this.health = 100;
+        this.isBlocking = false;
+        this.name = name;
+        this.leftKeys = leftKeys;
+        this.rightKeys = rightKeys;
+      }
 
-    function drawFighter(f) {
-      ctx.fillStyle = f.color;
-      ctx.fillRect(f.x - 25, f.y - 50, 50, 50);
-      ctx.fillStyle = 'lime';
-      ctx.fillRect(f.x - 30, f.y - 60, f.hp / 2, 5);
-    }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, canvas.height - this.height - this.y, this.width, this.height);
+      }
 
-    function hit(p1, p2) {
-      if (Math.abs(p1.x - p2.x) < 50) {
-        p2.hp -= 5;
+      update() {
+        this.y -= this.velocityY;
+        this.velocityY -= gravity;
+        if (this.y < 0) {
+          this.y = 0;
+          this.isJumping = false;
+        }
+        this.draw();
+      }
+
+      move(direction) {
+        const speed = 8;
+        if (direction === "left" && this.x > 0) this.x -= speed;
+        if (direction === "right" && this.x < canvas.width - this.width) this.x += speed;
+      }
+
+      jump() {
+        if (!this.isJumping) {
+          this.velocityY = 15;
+          this.isJumping = true;
+        }
+      }
+
+      attack(opponent) {
+        if (
+          this.x + this.width > opponent.x &&
+          this.x < opponent.x + opponent.width
+        ) {
+          if (!opponent.isBlocking) opponent.health -= 10;
+        }
+      }
+
+      block() {
+        this.isBlocking = true;
+        setTimeout(() => (this.isBlocking = false), 500);
       }
     }
 
-    function update() {
-      // Movimiento del jugador
-      if (keys['a']) player.x -= 5;
-      if (keys['d']) player.x += 5;
-      if (keys['s']) hit(player, enemy);
+    const player1 = new Fighter({
+      x: 100,
+      color: "red",
+      leftKeys: { left: "a", right: "d", jump: "w", attack: "s", block: "q" },
+      rightKeys: {},
+      name: "Alan García",
+    });
 
-      // Movimiento simple del enemigo
-      if (enemy.x > player.x + 60) enemy.x -= 2;
-      else if (enemy.x < player.x - 60) enemy.x += 2;
-      else if (Math.random() < 0.02) hit(enemy, player);
+    const player2 = new Fighter({
+      x: 700,
+      color: "blue",
+      leftKeys: {},
+      rightKeys: { left: "ArrowLeft", right: "ArrowRight", jump: "ArrowUp", attack: "ArrowDown", block: "Enter" },
+      name: "Keiko Fujimori",
+    });
 
-      // Limitar bordes
-      player.x = Math.max(50, Math.min(750, player.x));
-      enemy.x  = Math.max(50, Math.min(750, enemy.x));
-
-      // Dibujar
+    function updateGame() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawFighter(player);
-      drawFighter(enemy);
+      player1.update();
+      player2.update();
 
-      // Mostrar resultado
-      if (player.hp <= 0 || enemy.hp <= 0) {
-        ctx.fillStyle = 'white';
-        ctx.font = '30px Arial';
+      document.getElementById("p1-bar").style.width = player1.health + "%";
+      document.getElementById("p2-bar").style.width = player2.health + "%";
+
+      if (player1.health <= 0 || player2.health <= 0) {
+        ctx.fillStyle = "yellow";
+        ctx.font = "40px Arial";
         ctx.fillText(
-          player.hp > enemy.hp ? '🏆 ¡Ganaste la Presidencia!' : '😵 Derrota...',
-          200, 200
+          `${player1.health <= 0 ? player2.name : player1.name} gana la presidencia!`,
+          180,
+          200
         );
         return;
       }
 
-      requestAnimationFrame(update);
+      requestAnimationFrame(updateGame);
     }
 
-    update();
+    const keys = {};
+
+    window.addEventListener("keydown", (e) => {
+      keys[e.key] = true;
+
+      // Player 1 controls
+      if (e.key === player1.leftKeys.left) player1.move("left");
+      if (e.key === player1.leftKeys.right) player1.move("right");
+      if (e.key === player1.leftKeys.jump) player1.jump();
+      if (e.key === player1.leftKeys.attack) player1.attack(player2);
+      if (e.key === player1.leftKeys.block) player1.block();
+
+      // Player 2 controls
+      if (e.key === player2.rightKeys.left) player2.move("left");
+      if (e.key === player2.rightKeys.right) player2.move("right");
+      if (e.key === player2.rightKeys.jump) player2.jump();
+      if (e.key === player2.rightKeys.attack) player2.attack(player1);
+      if (e.key === player2.rightKeys.block) player2.block();
+    });
+
+    updateGame();
   </script>
 </body>
 </html>
