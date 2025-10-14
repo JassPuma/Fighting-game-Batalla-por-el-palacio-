@@ -66,15 +66,15 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const gravity = 0.6;
-    const groundLevel = 300;
+    const gravity = 0.8;
+    const groundY = 300; // Piso base (ajustado)
 
     class Fighter {
       constructor({ x, color, controls, name }) {
         this.x = x;
-        this.y = groundLevel;
         this.width = 50;
         this.height = 100;
+        this.y = groundY; // Empieza parado sobre el piso
         this.color = color;
         this.velocityY = 0;
         this.health = 100;
@@ -90,14 +90,15 @@
       }
 
       update() {
-        // Aplicar gravedad
-        if (this.y < groundLevel) {
+        // Aplicar gravedad solo si está en el aire
+        if (this.y < groundY) {
           this.velocityY += gravity;
           this.y += this.velocityY;
-        } else {
-          this.velocityY = 0;
-          this.y = groundLevel;
-          this.isJumping = false;
+          if (this.y > groundY) {
+            this.y = groundY;
+            this.velocityY = 0;
+            this.isJumping = false;
+          }
         }
         this.draw();
       }
@@ -121,7 +122,7 @@
           this.x < opponent.x + opponent.width
         ) {
           if (!opponent.isBlocking) {
-            opponent.health -= 10;
+            opponent.health = Math.max(0, opponent.health - 10);
           }
         }
       }
@@ -133,7 +134,7 @@
     }
 
     const alan = new Fighter({
-      x: 100,
+      x: 150,
       color: "red",
       controls: { left: "a", right: "d", jump: "w", attack: "s", block: "q" },
       name: "Alan García",
@@ -146,14 +147,12 @@
       name: "Keiko Fujimori",
     });
 
-    const fighters = [alan, keiko];
-
     function updateGame() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Dibujar suelo
       ctx.fillStyle = "#555";
-      ctx.fillRect(0, groundLevel + 100, canvas.width, 10);
+      ctx.fillRect(0, groundY + 100, canvas.width, 10);
 
       alan.update();
       keiko.update();
