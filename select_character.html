@@ -1,98 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elige tu candidato presidencial</title>
-  <style>
-    body {
-      background: linear-gradient(120deg, #8b0000, #1a1a1a);
-      color: white;
-      font-family: 'Arial Black', sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-    h1 {
-      margin-top: 20px;
-      font-size: 2.2em;
-      text-shadow: 2px 2px 5px black;
-    }
-    .characters {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 30px;
-      gap: 20px;
-      padding: 20px;
-    }
-    .character {
-      border: 3px solid white;
-      border-radius: 12px;
-      width: 140px;
-      cursor: pointer;
-      transition: 0.3s;
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
-    }
-    .character:hover {
-      background: rgba(255,255,255,0.3);
-      transform: scale(1.1);
-      box-shadow: 0 0 20px gold;
-    }
-    .character img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .character span {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      font-size: 14px;
-      color: #fff;
-    }
-    footer {
-      margin-top: 40px;
-      font-size: 0.9em;
-      opacity: 0.7;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selecciona tu personaje</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🇵🇪 Elige tu candidato presidencial</h1>
 
-  <div class="characters" id="characterSelect">
-    <div class="character" data-name="velasco"><img src="assets/sprites/velasco.png"><span>Juan Velasco Alvarado</span></div>
-    <div class="character" data-name="alan"><img src="assets/sprites/alan.png"><span>Alan García</span></div>
-    <div class="character" data-name="fujimori"><img src="assets/sprites/fujimori.png"><span>Alberto Fujimori</span></div>
-    <div class="character" data-name="toledo"><img src="assets/sprites/toledo.png"><span>Alejandro Toledo</span></div>
-    <div class="character" data-name="humala"><img src="assets/sprites/humala.png"><span>Ollanta Humala</span></div>
-    <div class="character" data-name="castillo"><img src="assets/sprites/castillo.png"><span>Pedro Castillo</span></div>
-    <div class="character" data-name="keiko"><img src="assets/sprites/keiko.png"><span>Keiko Fujimori</span></div>
-    <div class="character" data-name="veronika"><img src="assets/sprites/veronika.png"><span>Verónika Mendoza</span></div>
-    <div class="character" data-name="acuna"><img src="assets/sprites/acuna.png"><span>César Acuña</span></div>
-    <div class="character" data-name="aliaga"><img src="assets/sprites/aliaga.png"><span>Rafael López Aliaga</span></div>
-    <div class="character" data-name="desoto"><img src="assets/sprites/desoto.png"><span>Hernando de Soto</span></div>
-    <div class="character" data-name="lescano"><img src="assets/sprites/lescano.png"><span>Yonhy Lescano</span></div>
-    <div class="character" data-name="forsyth"><img src="assets/sprites/forsyth.png"><span>George Forsyth</span></div>
-    <div class="character" data-name="antauro"><img src="assets/sprites/antauro.png"><span>Antauro Humala</span></div>
-    <div class="character" data-name="guzman"><img src="assets/sprites/guzman.png"><span>Julio Guzmán</span></div>
-  </div>
+<h1>Selecciona tu personaje</h1>
 
-  <footer>Hecho con humor y sin ofender 🇵🇪</footer>
+<div class="characters">
+    <div class="character" data-name="velasco">Juan Velasco</div>
+    <div class="character" data-name="alan">Alan García</div>
+    <div class="character" data-name="fujimori">Alberto Fujimori</div>
+    <!-- Agrega todos los demás personajes -->
+</div>
 
-  <script>
-    const characters = document.querySelectorAll('.character');
-    characters.forEach(c => {
-      c.addEventListener('click', () => {
-        const selected = c.dataset.name;
-        localStorage.setItem('selectedCharacter', selected);
-        window.location.href = 'game.html'; // Va al juego
-      });
-    });
-  </script>
+<script src="characters.js"></script>
+
 </body>
 </html>
+
