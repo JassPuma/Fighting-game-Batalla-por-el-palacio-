@@ -1,67 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fighting Game: Batalla por el Palacio</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalla Presidencial</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 🎥 Video de fondo -->
-  <video autoplay muted loop id="background-video" playsinline>
-    <source src="assets/videos/palacio.mp4" type="video/mp4">
-    Tu navegador no soporta videos HTML5.
-  </video>
+    <!-- Video de fondo -->
+    <video autoplay muted loop id="background-video">
+        <source src="assets/videos/palacio.mp4" type="video/mp4">
+        Tu navegador no soporta videos HTML5.
+    </video>
 
-  <!-- 🎵 Música de fondo -->
-  <audio id="bgMusic" src="assets/audio/condor_pasa.mp3" loop></audio>
+    <!-- Overlay oscuro -->
+    <div id="overlay"></div>
 
-  <!-- 🌑 Capa semitransparente -->
-  <div id="overlay"></div>
-
-  <!-- 🏛️ Contenedor principal -->
-  <div class="menu-container">
-    <h1 id="game-title">🎮 Fighting Game:<br>“Batalla por el Palacio”</h1>
-
-    <div class="menu-buttons">
-      <button onclick="startGame()">Play</button>
-      <button onclick="openSettings()">Settings</button>
-      <button onclick="changeLanguage()">Language</button>
-      <button onclick="showCredits()">Credits</button>
-      <button onclick="exitGame()">Exit</button>
+    <!-- Contenedor del menú -->
+    <div class="menu-container">
+        <h1 id="game-title">🇵🇪 Batalla Presidencial</h1>
+        <div class="menu-buttons">
+            <button onclick="startGame()">Play</button>
+            <button onclick="openSettings()">Settings</button>
+            <button onclick="changeLanguage()">Languages</button>
+            <button onclick="showCredits()">Credits</button>
+            <button onclick="exitGame()">Exit</button>
+        </div>
     </div>
-  </div>
 
-  <!-- 🔊 Sonidos -->
-  <audio id="hoverSound" src="assets/audio/hover.mp3"></audio>
-  <audio id="clickSound" src="assets/audio/click.mp3"></audio>
+    <!-- Audio de fondo -->
+    <audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
 
-  <script>
-    // 🎵 Activar música automáticamente con volumen progresivo
-    const bgMusic = document.getElementById('bgMusic');
-    bgMusic.volume = 0;
-    bgMusic.play().then(() => {
-      setTimeout(() => {
-        bgMusic.volume = 0.6;
-      }, 2000);
-    }).catch(err => console.log("Autoplay bloqueado por el navegador:", err));
+    <script>
+        const hoverSound = new Audio('assets/sounds/hover.mp3');
+        const clickSound = new Audio('assets/sounds/click.mp3');
+        const buttons = document.querySelectorAll('.menu-buttons button');
+        const bgAudio = document.getElementById('bgAudio');
 
-    // 🎧 Sonidos del menú
-    const hoverSound = document.getElementById('hoverSound');
-    const clickSound = document.getElementById('clickSound');
-    const buttons = document.querySelectorAll('.menu-buttons button');
+        // Sonido hover y click
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseover', () => hoverSound.play());
+            btn.addEventListener('click', () => clickSound.play());
+        });
 
-    buttons.forEach(btn => {
-      btn.addEventListener('mouseover', () => hoverSound.play());
-      btn.addEventListener('click', () => clickSound.play());
-    });
+        // Activar audio de fondo al primer clic del usuario
+        document.addEventListener('click', () => {
+            bgAudio.play();
+        }, { once: true });
 
-    // 🕹️ Funciones de botones
-    function startGame() { window.location.href = 'select_character.html'; }
-    function openSettings() { alert("Ajustes próximamente disponibles"); }
-    function changeLanguage() { alert("Función de idiomas en desarrollo"); }
-    function showCredits() { alert("Creado por JassPuma Studios"); }
-    function exitGame() { alert("Cerrando el juego..."); }
-  </script>
+        // Funciones de botones
+        function startGame() {
+            clickSound.play();
+            window.location.href = 'select_character.html';
+        }
+        function openSettings() { alert("Aquí se abren los ajustes"); }
+        function changeLanguage() { alert("Aquí se cambia el idioma"); }
+        function showCredits() { alert("Créditos del juego"); }
+        function exitGame() { alert("Cerrando el juego..."); }
+    </script>
 </body>
 </html>
+
