@@ -1,44 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Selecciona tu personaje</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Selecciona tu personaje</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    #characters-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .character {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .character:hover {
+      transform: scale(1.1);
+      border-color: yellow;
+    }
+  </style>
 </head>
 <body>
+  <h1>Selecciona tu personaje</h1>
+  <div id="characters-container"></div>
 
-<h1>Selecciona tu personaje</h1>
+  <script src="characters.js"></script>
+  <script>
+    const container = document.getElementById("characters-container");
 
-<div class="characters" id="charactersContainer"></div>
+    characters.forEach(char => {
+      const img = document.createElement("img");
+      img.src = char.img;
+      img.alt = char.name;
+      img.title = char.name;
+      img.classList.add("character");
 
-<script type="module">
-import { characters } from './js/characters.js';
+      img.addEventListener("click", () => {
+        // Guardar personaje seleccionado en sessionStorage para usar en la siguiente página
+        sessionStorage.setItem("selectedCharacter", JSON.stringify(char));
+        // Redirigir a la transición
+        window.location.href = "index_transition.html";
+      });
 
-const container = document.getElementById('charactersContainer');
-
-for (const key in characters) {
-    const char = characters[key];
-    const div = document.createElement('div');
-    div.classList.add('character');
-    div.dataset.name = key;
-    div.style.border = `2px solid ${char.color}`;
-    div.style.color = char.color;
-    div.innerHTML = `
-        <span>${char.name}</span>
-        <p>Arma: ${char.weapon}</p>
-        <p>Especial: ${char.special} (${char.specialPower})</p>
-    `;
-    container.appendChild(div);
-
-    div.addEventListener('click', () => {
-        localStorage.setItem('selectedCharacter', key);
-        alert(`Has seleccionado a ${char.name}`);
-        window.location.href = 'game.html';
+      container.appendChild(img);
     });
-}
-</script>
-
+  </script>
 </body>
 </html>
+
 
