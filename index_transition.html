@@ -1,72 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Transición narrativa</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body, html { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; background:black; color:white; overflow:hidden; }
-    #muro {
-      width:100%;
-      height:100%;
-      background: url('assets/images/muro.jpg') no-repeat center center;
-      background-size: cover;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      padding:50px;
-      box-sizing:border-box;
-      flex-direction: column;
-    }
-    #narrativa {
-      font-size:28px; /* un poco más grande */
-      line-height:1.5;
-      max-width:900px;
-      text-shadow: 2px 2px 2px black;
-      color: yellow; /* amarillo */
-      margin-bottom:30px;
-    }
-    #skip-btn {
-      padding:10px 25px;
-      font-size:20px;
-      cursor:pointer;
-      border:none;
-      border-radius:8px;
-      background-color:darkred;
-      color:white;
-    }
-    #skip-btn:hover { background-color:red; }
-  </style>
+<meta charset="UTF-8">
+<title>Transición narrativa</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body, html { margin:0; padding:0; height:100%; font-family: 'Sans-serif'; background:black; color:white; overflow:hidden; }
+  #muro {
+    width:100%; height:100%;
+    background: url('assets/images/muro.jpg') no-repeat center center;
+    background-size: cover;
+    display:flex; justify-content:center; align-items:center;
+    text-align:center; padding:50px; box-sizing:border-box;
+    flex-direction: column;
+  }
+  #narrativa {
+    font-size:28px; /* entre 24-32px */
+    line-height:1.5;
+    max-width:900px;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 3px black; /* contorno negro */
+    margin-bottom:30px;
+  }
+  #skip-btn {
+    padding:10px 25px;
+    font-size:20px;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+    background-color:darkred;
+    color:white;
+  }
+  #skip-btn:hover { background-color:red; }
+</style>
 </head>
 <body>
 
-  <div id="muro">
-    <div id="narrativa"></div>
-    <button id="skip-btn">Skip</button>
-  </div>
+<div id="muro">
+  <div id="narrativa"></div>
+  <button id="skip-btn">Skip</button>
+</div>
 
-  <script>
-    const texto = `“Tras la inesperada caída de Pedro Castillo, el país se sumerge en un torbellino de incertidumbre. Entra Dina Boluarte, asumiendo las riendas de la nación, mientras las calles y los parlamentos vibran entre tensiones y expectativas. Cada decisión cuenta, cada movimiento puede cambiar el rumbo. Y pronto… las elecciones se acercan, prometiendo redefinir el destino del país. ¡Prepárate para vivir la política al límite!”`;
-    const narrativa = document.getElementById("narrativa");
-    const skipBtn = document.getElementById("skip-btn");
-    let i=0;
+<script>
+const texto = `“Tras la inesperada caída de Pedro Castillo, el país se sumerge en un torbellino de incertidumbre. Entra Dina Boluarte, asumiendo las riendas de la nación, mientras las calles y los parlamentos vibran entre tensiones y expectativas. Cada decisión cuenta, cada movimiento puede cambiar el rumbo. Y pronto… las elecciones se acercan, prometiendo redefinir el destino del país. ¡Prepárate para vivir la política al límite!”`;
+const narrativa = document.getElementById("narrativa");
+const skipBtn = document.getElementById("skip-btn");
+let i=0;
 
-    function escribirLetra() {
-      if(i < texto.length){
-        narrativa.innerHTML += texto.charAt(i);
-        i++;
-        setTimeout(escribirLetra, 30);
-      }
-    }
-    escribirLetra();
+function escribirLetra() {
+  if(i<texto.length){
+    narrativa.innerHTML += texto.charAt(i);
+    i++;
+    setTimeout(escribirLetra,30);
+  }
+}
+escribirLetra();
 
-    skipBtn.addEventListener("click", () => {
-      window.location.href = "main.html";
-    });
-  </script>
+skipBtn.addEventListener("click", () => {
+  window.location.href = "main.html";
+});
+</script>
 
 </body>
 </html>
+
 
 
