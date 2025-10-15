@@ -10,14 +10,34 @@
 
 <h1>Selecciona tu personaje</h1>
 
-<div class="characters">
-    <div class="character" data-name="velasco">Juan Velasco</div>
-    <div class="character" data-name="alan">Alan García</div>
-    <div class="character" data-name="fujimori">Alberto Fujimori</div>
-    <!-- Agrega todos los demás personajes -->
-</div>
+<div class="characters" id="charactersContainer"></div>
 
-<script src="characters.js"></script>
+<script type="module">
+import { characters } from './js/characters.js';
+
+const container = document.getElementById('charactersContainer');
+
+for (const key in characters) {
+    const char = characters[key];
+    const div = document.createElement('div');
+    div.classList.add('character');
+    div.dataset.name = key;
+    div.style.border = `2px solid ${char.color}`;
+    div.style.color = char.color;
+    div.innerHTML = `
+        <span>${char.name}</span>
+        <p>Arma: ${char.weapon}</p>
+        <p>Especial: ${char.special} (${char.specialPower})</p>
+    `;
+    container.appendChild(div);
+
+    div.addEventListener('click', () => {
+        localStorage.setItem('selectedCharacter', key);
+        alert(`Has seleccionado a ${char.name}`);
+        window.location.href = 'game.html';
+    });
+}
+</script>
 
 </body>
 </html>
