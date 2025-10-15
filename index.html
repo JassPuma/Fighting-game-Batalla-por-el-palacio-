@@ -8,42 +8,31 @@
 </head>
 <body>
 
-<!-- Video de fondo -->
 <video autoplay muted loop id="background-video">
-    <source src="assets/videos/video_inicio.mp4" type="video/mp4">
+    <source src="assets/video_inicio.mp4" type="video/mp4">
 </video>
 
-<!-- Overlay -->
 <div id="overlay"></div>
 
-<!-- Contenedor central -->
 <div class="menu-container">
     <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
     <button id="startBtn">Start Game</button>
     <p id="intro-text">Listo para las elecciones 2026</p>
 </div>
 
-<!-- Audio de fondo (inactivo hasta Start Game) -->
 <audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
 
 <script>
 const bgAudio = document.getElementById('bgAudio');
-const hoverSound = new Audio('assets/sounds/hover.mp3');
-const clickSound = new Audio('assets/sounds/click.mp3');
-
 const startBtn = document.getElementById('startBtn');
 
-hoverSound.volume = 0.8;
-clickSound.volume = 1.0;
-
-startBtn.addEventListener('mouseover', () => hoverSound.play());
-
 startBtn.addEventListener('click', () => {
-    clickSound.play();
     bgAudio.volume = 0.5;
-    bgAudio.play().catch(() => {});
+    bgAudio.play().catch(() => console.log("Audio bloqueado"));
+    
     alert("Tras la derrota de Castillo, Dina asumió el poder. Al acercarse las elecciones, los candidatos se preparan para la pelea por el Palacio.");
-    window.location.href = "main.html"; // lleva a la pantalla principal con palacio
+
+    window.location.href = "main.html"; // va a pantalla principal
 });
 </script>
 
