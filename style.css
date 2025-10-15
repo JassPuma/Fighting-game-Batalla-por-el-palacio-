@@ -1,100 +1,150 @@
-/* Fuente arcade */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-/* Pantalla completa */
+/* =====================
+   GENERAL
+===================== */
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
     width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
     overflow: hidden;
-    font-family: 'Press Start 2P', monospace;
     background: black;
 }
 
-/* Video de fondo */
+/* =====================
+   VIDEO DE FONDO
+===================== */
 #background-video {
     position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     z-index: -2;
 }
 
-/* Overlay transparente */
 #overlay {
     position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color: rgba(0,0,0,0.15); /* menos opaco para ver el palacio */
-    z-index:-1;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.2);
+    z-index: -1;
 }
 
-/* Contenedor del menú */
+/* =====================
+   MENÚ CENTRAL
+===================== */
 .menu-container {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
     text-align: center;
+    color: #00ffea;
 }
 
-/* Título arcade */
+/* =====================
+   TITULO ARCADE
+===================== */
 #game-title {
-    font-size:50px;
-    color:#00ffea;
-    text-shadow:0 0 3px #00ffea,0 0 6px #00ffea,0 0 10px #0ff,0 0 20px #0ff;
-    animation: neonPulse 1.5s infinite alternate, colorShift 3s linear infinite;
-    margin-bottom: 60px;
+    font-size: 40px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 3px #00ffea, 0 0 6px #00ffea, 0 0 10px #0ff, 0 0 20px #0ff;
+    animation: neonPulse 1.5s infinite alternate;
 }
 
-/* Animaciones título */
 @keyframes neonPulse {
-    0% { text-shadow: 0 0 3px #00ffea,0 0 6px #00ffea,0 0 10px #0ff,0 0 20px #0ff; }
-    50% { text-shadow: 0 0 8px #ff00ff,0 0 16px #f0f,0 0 24px #f0f,0 0 40px #f0f; }
-    100% { text-shadow: 0 0 3px #00ffea,0 0 6px #00ffea,0 0 10px #0ff,0 0 20px #0ff; }
+    0% { text-shadow:0 0 3px #00ffea,0 0 6px #00ffea,0 0 10px #0ff,0 0 20px #0ff; }
+    50% { text-shadow:0 0 8px #ff00ff,0 0 16px #f0f,0 0 24px #f0f,0 0 40px #f0f; }
+    100% { text-shadow:0 0 3px #00ffea,0 0 6px #00ffea,0 0 10px #0ff,0 0 20px #0ff; }
 }
 
-@keyframes colorShift {
-    0% { color: #00ffea; }
-    25% { color: #ff00ff; }
-    50% { color: #ffff00; }
-    75% { color: #ff0000; }
-    100% { color: #00ffea; }
-}
-
-/* Botones arcade */
-.menu-buttons button {
-    display: block;
-    margin: 20px auto;
-    padding: 20px 70px;
-    font-size: 24px;
+/* =====================
+   BOTONES
+===================== */
+button, .menu-buttons button {
+    padding: 20px 60px;
+    font-size: 20px;
     border: 3px solid #00ffea;
     border-radius: 12px;
     background-color: rgba(0,0,0,0.7);
     color: #00ffea;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    box-shadow:0 0 10px #00ffea,0 0 20px #0ff,0 0 30px #0ff;
     text-transform: uppercase;
-    animation: buttonGlow 2s infinite alternate;
+    box-shadow: 0 0 10px #00ffea,0 0 20px #0ff,0 0 30px #0ff;
+    transition: all 0.3s ease-in-out;
+    margin: 10px;
 }
 
-/* Hover botones */
-.menu-buttons button:hover {
+button:hover, .menu-buttons button:hover {
     background-color: #00ffea;
     color: black;
     transform: scale(1.2);
-    box-shadow:0 0 20px #ff00ff,0 0 40px #f0f,0 0 60px #f0f;
+    box-shadow: 0 0 20px #ff00ff,0 0 40px #f0f,0 0 60px #f0f;
 }
 
-/* Animación parpadeo botones */
-@keyframes buttonGlow {
-    0% { box-shadow:0 0 10px #00ffea,0 0 20px #0ff,0 0 30px #0ff; }
-    50% { box-shadow:0 0 20px #ff00ff,0 0 40px #f0f,0 0 60px #f0f; }
-    100% { box-shadow:0 0 10px #00ffea,0 0 20px #0ff,0 0 30px #0ff; }
+/* =====================
+   TEXTO INTRODUCTORIO
+===================== */
+#intro-text {
+    margin-top: 20px;
+    font-size: 18px;
+    text-shadow: 0 0 3px #00ffea;
 }
 
+/* =====================
+   SELECCIÓN DE PERSONAJES
+===================== */
+.characters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.character {
+    background: rgba(0,0,0,0.3);
+    padding: 15px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    min-width: 180px;
+    text-align: center;
+}
+
+.character:hover {
+    background: rgba(0,255,234,0.6);
+    transform: scale(1.1);
+}
+
+.character span {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.character p {
+    margin: 2px 0;
+    font-size: 14px;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media screen and (max-width: 600px) {
+    #game-title {
+        font-size: 28px;
+    }
+    button, .menu-buttons button {
+        padding: 15px 40px;
+        font-size: 16px;
+    }
+    .character {
+        min-width: 140px;
+        padding: 10px 15px;
+    }
+}
 
