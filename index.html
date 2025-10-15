@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fighting Game "Batalla por el Palacio"</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fighting Game "Batalla por el Palacio"</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Video de fondo -->
     <video autoplay muted loop id="background-video">
         <source src="assets/videos/palacio.mp4" type="video/mp4">
-        Tu navegador no soporta videos HTML5.
     </video>
 
     <!-- Overlay oscuro -->
@@ -18,13 +17,12 @@
 
     <!-- Contenedor del menú -->
     <div class="menu-container">
-        <h1 id="game-title">Fighting Game "Batalla por el Palacio"</h1>
+        <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
         <div class="menu-buttons">
-            <button onclick="startGame()">Play</button>
+            <button id="startBtn">Start Game</button>
             <button onclick="openSettings()">Settings</button>
             <button onclick="changeLanguage()">Languages</button>
             <button onclick="showCredits()">Credits</button>
-            <button onclick="exitGame()">Exit</button>
         </div>
     </div>
 
@@ -34,45 +32,32 @@
     <script>
         const bgAudio = document.getElementById('bgAudio');
 
-        // Intentar reproducir audio automáticamente al cargar
-        window.addEventListener('load', () => {
-            bgAudio.volume = 0.5; // Volumen de fondo
-            bgAudio.muted = false;
-            bgAudio.play().catch(e => {
-                console.log("El navegador bloqueó el autoplay. Se reproducirá al primer click.");
-            });
-        });
-
         // Sonidos hover y click
         const hoverSound = new Audio('assets/sounds/hover.mp3');
         const clickSound = new Audio('assets/sounds/click.mp3');
 
-        hoverSound.volume = 0.8; // más fuerte
-        clickSound.volume = 1.0; // más fuerte
+        hoverSound.volume = 0.8;
+        clickSound.volume = 1.0;
 
         const buttons = document.querySelectorAll('.menu-buttons button');
 
-        // Reproducir efectos
         buttons.forEach(btn => {
             btn.addEventListener('mouseover', () => hoverSound.play());
-            btn.addEventListener('click', () => {
-                clickSound.play();
-                // Asegurarse que audio de fondo se reproduzca si fue bloqueado
-                if(bgAudio.paused){
-                    bgAudio.play().catch(e => console.log("Audio bloqueado:", e));
-                }
-            });
+            btn.addEventListener('click', () => clickSound.play());
         });
 
-        // Funciones de botones
-        function startGame() {
+        // Botón Start Game reproduce audio de fondo
+        document.getElementById('startBtn').addEventListener('click', () => {
+            bgAudio.play().catch(e => console.log("Audio bloqueado por navegador:", e));
+            // Aquí se puede redirigir al juego
             window.location.href = 'select_character.html';
-        }
+        });
+
         function openSettings() { alert("Aquí se abren los ajustes"); }
         function changeLanguage() { alert("Aquí se cambia el idioma"); }
         function showCredits() { alert("Créditos del juego"); }
-        function exitGame() { alert("Cerrando el juego..."); }
     </script>
 </body>
 </html>
+
 
