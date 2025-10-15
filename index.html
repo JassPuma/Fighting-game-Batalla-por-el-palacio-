@@ -1,71 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Batalla por el Palacio</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fighting Game: Batalla por el Palacio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <!-- 🎥 Video de fondo -->
   <video autoplay muted loop id="background-video" playsinline>
     <source src="assets/videos/palacio.mp4" type="video/mp4">
     Tu navegador no soporta videos HTML5.
   </video>
 
-  <!-- Contenido principal -->
-  <div class="content">
-    <h1>Batalla por el Palacio</h1>
-    <p>Elige tu candidato y pelea por el poder</p>
+  <!-- 🎵 Música de fondo -->
+  <audio id="bgMusic" src="assets/audio/condor_pasa.mp3" loop></audio>
 
-    <div class="buttons">
-      <a href="select_character.html" class="btn">Jugar</a>
-      <a href="game.html" class="btn">Entrar al combate</a>
+  <!-- 🌑 Capa semitransparente -->
+  <div id="overlay"></div>
+
+  <!-- 🏛️ Contenedor principal -->
+  <div class="menu-container">
+    <h1 id="game-title">🎮 Fighting Game:<br>“Batalla por el Palacio”</h1>
+
+    <div class="menu-buttons">
+      <button onclick="startGame()">Play</button>
+      <button onclick="openSettings()">Settings</button>
+      <button onclick="changeLanguage()">Language</button>
+      <button onclick="showCredits()">Credits</button>
+      <button onclick="exitGame()">Exit</button>
     </div>
   </div>
 
-  <!-- 🎵 Audio de fondo -->
-  <audio id="bgMusic" preload="auto" loop>
-    <source src="assets/sounds/condor_bossa.mp3" type="audio/mpeg">
-    Tu navegador no soporta audio HTML5.
-  </audio>
+  <!-- 🔊 Sonidos -->
+  <audio id="hoverSound" src="assets/audio/hover.mp3"></audio>
+  <audio id="clickSound" src="assets/audio/click.mp3"></audio>
 
-  <!-- 🔈 Botón para controlar la música -->
-  <button id="musicToggle" aria-pressed="false" title="Activar / desactivar música">🔈 Música</button>
-
-  <!-- 📜 Script -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const bg = document.getElementById('bgMusic');
-      const btn = document.getElementById('musicToggle');
-      bg.volume = 0.25;
+    // 🎵 Activar música automáticamente con volumen progresivo
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0;
+    bgMusic.play().then(() => {
+      setTimeout(() => {
+        bgMusic.volume = 0.6;
+      }, 2000);
+    }).catch(err => console.log("Autoplay bloqueado por el navegador:", err));
 
-      // Función para intentar reproducir el audio (seguridad por bloqueo de autoplay)
-      function safePlay() {
-        bg.play().catch(e => console.log('Autoplay bloqueado, espera interacción.', e));
-      }
+    // 🎧 Sonidos del menú
+    const hoverSound = document.getElementById('hoverSound');
+    const clickSound = document.getElementById('clickSound');
+    const buttons = document.querySelectorAll('.menu-buttons button');
 
-      // Intentar reproducir al cargar
-      safePlay();
-
-      // Alternar música al hacer clic
-      btn.addEventListener('click', () => {
-        if (bg.paused) {
-          bg.play();
-          btn.textContent = '🔊 Música ON';
-          btn.setAttribute('aria-pressed', 'true');
-        } else {
-          bg.pause();
-          btn.textContent = '🔈 Música';
-          btn.setAttribute('aria-pressed', 'false');
-        }
-      });
-
-      // Si el usuario toca la pantalla, intentar reproducir (para móviles)
-      window.addEventListener('pointerdown', () => safePlay(), { once: true });
+    buttons.forEach(btn => {
+      btn.addEventListener('mouseover', () => hoverSound.play());
+      btn.addEventListener('click', () => clickSound.play());
     });
-  </script>
 
+    // 🕹️ Funciones de botones
+    function startGame() { window.location.href = 'select_character.html'; }
+    function openSettings() { alert("Ajustes próximamente disponibles"); }
+    function changeLanguage() { alert("Función de idiomas en desarrollo"); }
+    function showCredits() { alert("Creado por JassPuma Studios"); }
+    function exitGame() { alert("Cerrando el juego..."); }
+  </script>
 </body>
 </html>
