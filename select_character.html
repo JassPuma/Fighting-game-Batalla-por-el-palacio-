@@ -79,6 +79,25 @@ characters.forEach(char=>{
   const card=document.createElement("div");
   card.classList.add("character-card");
 
-  const img=document.createElement("
+  const img=document.createElement("img");
+  img.src=char.img; img.alt=char.name; img.title=char.name; img.classList.add("character");
+
+  const name=document.createElement("div");
+  name.classList.add("character-name");
+  name.textContent=char.name;
+
+  img.addEventListener("click",()=>{
+    sessionStorage.setItem("selectedCharacter",JSON.stringify(char));
+    window.location.href="battle.html";
+  });
+
+  card.appendChild(img);
+  card.appendChild(name);
+  container.appendChild(card);
+});
+</script>
+
+</body>
+</html>
 
 
