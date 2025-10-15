@@ -8,18 +8,23 @@
 </head>
 <body>
 
+<!-- Video de fondo -->
 <video autoplay muted loop id="background-video">
     <source src="assets/videos/video_inicio.mp4" type="video/mp4">
+    Tu navegador no soporta video HTML5.
 </video>
 
+<!-- Overlay para mejorar visibilidad de botones -->
 <div id="overlay"></div>
 
+<!-- Contenedor central -->
 <div class="menu-container">
     <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
     <button id="startBtn">Start Game</button>
     <p id="intro-text">Listo para las elecciones 2026</p>
 </div>
 
+<!-- Audio de fondo -->
 <audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
 
 <script>
@@ -27,16 +32,18 @@ const bgAudio = document.getElementById('bgAudio');
 const startBtn = document.getElementById('startBtn');
 
 startBtn.addEventListener('click', () => {
+    // reproducir audio al hacer clic
     bgAudio.volume = 0.5;
-    bgAudio.play().catch(() => console.log("Audio bloqueado"));
-    
-    // Ir a pantalla de transición
+    bgAudio.play().catch(() => console.log("Audio bloqueado por el navegador"));
+
+    // ir a pantalla de transición
     window.location.href = "index_transition.html";
 });
 </script>
 
 </body>
 </html>
+
 
 
 
