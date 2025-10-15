@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pelea - Street Fighters: Batalla por el Palacio</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Video de fondo */
+    #video-fondo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Contenedor de combate */
+    #battle-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 50px;
+      box-sizing: border-box;
+    }
+
+    .character {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 2px solid white;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+
+    .character:hover {
+      transform: scale(1.1);
+      border-color: yellow;
+    }
+
+    /* Panel de acciones */
+    #actions {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+    }
+
+    .action-btn {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: 2px solid red;
+      border-radius: 8px;
+      background: black;
+      color: white;
+      cursor: pointer;
+      text-shadow: 1px 1px 2px red;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.1);
+      background: red;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video del Congreso como escenario -->
+  <video id="video-fondo" autoplay loop muted>
+    <source src="videos/congreso.mp4" type="video/mp4">
+  </video>
+
+  <div id="battle-container">
+    <!-- Personaje del jugador -->
+    <img id="player-character" class="character" src="" alt="Jugador">
+
+    <!-- Personaje enemigo (puedes seleccionar aleatorio o fijo por ahora) -->
+    <img id="enemy-character" class="character" src="assets/images/characters/ollanta_humala.jpg" alt="Enemigo">
+  </div>
+
+  <!-- Panel de acciones -->
+  <div id="actions">
+    <button class="action-btn">Attack</button>
+    <button class="action-btn">Defend</button>
+    <button class="action-btn">Special</button>
+  </div>
+
+  <script>
+    // Cargar personaje seleccionado desde sessionStorage
+    const selected = JSON.parse(sessionStorage.getItem("selectedCharacter"));
+    const playerImg = document.getElementById("player-character");
+    playerImg.src = selected.img;
+    playerImg.alt = selected.name;
+  </script>
+
+</body>
+</html>
