@@ -29,10 +29,8 @@ characters.forEach(char=>{
   const img=document.createElement("img"); img.src=char.img; img.alt=char.name; img.title=char.name; img.classList.add("character");
   const name=document.createElement("div"); name.classList.add("character-name"); name.textContent=char.name;
   img.addEventListener("click",()=>{
-    // Guardar personaje y todos los candidatos restantes en sesión
     sessionStorage.setItem("selectedCharacter",JSON.stringify(char));
-    let remaining = [...characters];
-    remaining = remaining.filter(c=>c.name!==char.name);
+    let remaining = [...characters].filter(c=>c.name!==char.name);
     sessionStorage.setItem("remainingCandidates",JSON.stringify(remaining));
     window.location.href="battle.html";
   });
