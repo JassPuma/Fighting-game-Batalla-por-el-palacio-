@@ -43,7 +43,7 @@ body, html {
     text-align: center;
 }
 
-/* Título arcade pulsante */
+/* Título arcade con destellos */
 #game-title {
     font-size: 50px;
     color: #00ffea;
@@ -52,18 +52,26 @@ body, html {
         0 0 10px #00ffea,
         0 0 20px #0ff,
         0 0 40px #0ff;
-    animation: neonPulse 1s ease-in-out infinite alternate;
+    animation: neonPulse 1.5s ease-in-out infinite alternate, colorShift 3s linear infinite;
     margin-bottom: 60px;
 }
 
-/* Animación título */
+/* Animaciones título */
 @keyframes neonPulse {
-    0% { color: #00ffea; text-shadow: 0 0 5px #00ffea,0 0 10px #00ffea,0 0 20px #0ff,0 0 40px #0ff; }
-    50% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff,0 0 20px #ff00ff,0 0 40px #f0f,0 0 80px #f0f; }
-    100% { color: #00ffea; text-shadow: 0 0 5px #00ffea,0 0 10px #00ffea,0 0 20px #0ff,0 0 40px #0ff; }
+    0% { text-shadow: 0 0 5px #00ffea,0 0 10px #00ffea,0 0 20px #0ff,0 0 40px #0ff; }
+    50% { text-shadow: 0 0 20px #ff00ff,0 0 40px #f0f,0 0 60px #f0f,0 0 80px #f0f; }
+    100% { text-shadow: 0 0 5px #00ffea,0 0 10px #00ffea,0 0 20px #0ff,0 0 40px #0ff; }
 }
 
-/* Botones arcade */
+@keyframes colorShift {
+    0% { color: #00ffea; }
+    25% { color: #ff00ff; }
+    50% { color: #ffff00; }
+    75% { color: #ff0000; }
+    100% { color: #00ffea; }
+}
+
+/* Botones arcade con parpadeo rítmico */
 .menu-buttons button {
     display: block;
     margin: 20px auto;
@@ -89,12 +97,12 @@ body, html {
     color: black;
     transform: scale(1.25);
     box-shadow:
-        0 0 20px #00ffea,
-        0 0 40px #0ff,
-        0 0 60px #0ff;
+        0 0 30px #ff00ff,
+        0 0 60px #f0f,
+        0 0 90px #f0f;
 }
 
-/* Botones parpadeantes */
+/* Animación parpadeo botones */
 @keyframes buttonGlow {
     0% { box-shadow: 0 0 10px #00ffea,0 0 20px #0ff,0 0 30px #0ff; }
     50% { box-shadow: 0 0 20px #ff00ff,0 0 40px #f0f,0 0 60px #f0f; }
