@@ -2,33 +2,15 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Street Fighters: Batalla por el Palacio</title>
-<link rel="stylesheet" href="style.css">
+<title>Combate</title>
 <style>
 body, html { margin:0; padding:0; overflow:hidden; font-family: Arial, sans-serif; }
-
-#video-fondo {
-  position: fixed; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: -1;
-}
-
-#battle-container {
-  position: relative; width:100%; height:100%;
-}
-
-.character {
-  width: 150px; height:150px;
-  position:absolute; bottom:50px;
-  border:2px solid white; border-radius:10px;
-  transition:left 0.05s, bottom 0.05s, transform 0.1s;
-}
-
-.health-bar-container {
-  position:absolute; top:20px; width:300px; height:25px; border:2px solid white; border-radius:5px; background:black;
-}
-
+#video-fondo { position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1; }
+#battle-container { position:relative; width:100%; height:100%; }
+.character { width:150px; height:150px; position:absolute; bottom:50px; border:2px solid white; border-radius:10px; transition:left 0.05s, bottom 0.05s, transform 0.1s; }
+.health-bar-container { position:absolute; top:20px; width:300px; height:25px; border:2px solid white; border-radius:5px; background:black; }
 #player-health { left:20px; }
 #enemy-health { right:20px; }
-
 .health-bar { height:100%; background:red; width:100%; border-radius:3px; }
 </style>
 </head>
@@ -40,36 +22,43 @@ body, html { margin:0; padding:0; overflow:hidden; font-family: Arial, sans-seri
 
 <div id="battle-container">
   <img id="player" class="character" src="" alt="Jugador" style="left:50px;">
-  <img id="enemy" class="character" src="assets/images/characters/ollanta_humala.jpg" alt="Enemigo" style="left:700px;">
-
+  <img id="enemy" class="character" src="" alt="Enemigo" style="left:700px;">
   <div class="health-bar-container" id="player-health"><div class="health-bar" id="player-health-bar"></div></div>
   <div class="health-bar-container" id="enemy-health"><div class="health-bar" id="enemy-health-bar"></div></div>
 </div>
 
+<p style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); color:white; z-index:1;">Controles: ← → mover, ↑ saltar, A atacar, S especial</p>
+
 <script>
-const player=document.getElementById("player");
+// Cargar personaje y candidatos
+let selected = JSON.parse(sessionStorage.getItem("selectedCharacter"));
+let remaining = JSON.parse(sessionStorage.getItem("remainingCandidates") || "[]");
+
+const player=document.getElementById("player"); player.src = selected.img;
 const enemy=document.getElementById("enemy");
-const playerHealthBar=document.getElementById("player-health-bar");
-const enemyHealthBar=document.getElementById("enemy-health-bar");
 
-// Cargar personaje seleccionado
-const selected = JSON.parse(sessionStorage.getItem("selectedCharacter"));
-if(selected) player.src = selected.img;
+// Selección aleatoria del enemigo
+if(remaining.length>0){
+  let idx=Math.floor(Math.random()*remaining.length);
+  enemy.src = remaining[idx].img;
+  var currentEnemy = remaining[idx];
+} else {
+  window.location.href="you_win.html";
+}
 
-// Posiciones y stats
+// Stats
 let playerX=50, playerY=50, playerHealth=100;
 let enemyX=700, enemyY=50, enemyHealth=100;
 let jumping=false, jumpStart=0;
 
 // Controles
 const keys={ArrowLeft:false, ArrowRight:false, ArrowUp:false, KeyA:false, KeyS:false};
-document.addEventListener("keydown", e => { if(keys.hasOwnProperty(e.code)) keys[e.code]=true; });
-document.addEventListener("keyup", e => { if(keys.hasOwnProperty(e.code)) keys[e.code]=false; });
+document.addEventListener("keydown", e=>{ if(keys.hasOwnProperty(e.code)) keys[e.code]=true; });
+document.addEventListener("keyup", e=>{ if(keys.hasOwnProperty(e.code)) keys[e.code]=false; });
 
 // Función ataque
 function attack(attacker,target,damage){
   const targetObj=target===player? {get:()=>playerHealth,set:(v)=>playerHealth=v} : {get:()=>enemyHealth,set:(v)=>enemyHealth=v};
-  // Solo daño si están cerca
   if(Math.abs(parseInt(attacker.style.left)-parseInt(target.style.left))<160){
     targetObj.set(Math.max(0,targetObj.get()-damage));
     target.style.transform="translateX(-10px)";
@@ -77,36 +66,33 @@ function attack(attacker,target,damage){
   }
 }
 
-// Función actualizar
-function update(timestamp){
-  // Movimiento jugador
-  if(keys.ArrowLeft){
-    let newX=playerX-5;
-    if(newX+150 <= enemyX || playerY>enemyY+100) playerX=newX; // no atravesar enemigo a menos que salte sobre él
-  }
-  if(keys.ArrowRight){
-    let newX=playerX+5;
-    if(newX>=enemyX+150 || playerY>enemyY+100) playerX=newX; // no atravesar
-  }
+// Actualización de combate
+function update(){
+  const maxX = window.innerWidth - 150;
 
-  // Salto
-  if(keys.ArrowUp && !jumping){
-    jumping=true;
-    jumpStart=performance.now();
-  }
-  if(jumping){
-    let t=(performance.now()-jumpStart)/300; // salto 300ms subir
-    if(t<1){
-      playerY=50+100*Math.sin(Math.PI*t); // movimiento de subida y bajada
-    } else {
-      playerY=50;
-      jumping=false;
+  // Movimiento jugador con límites
+  if(keys.ArrowLeft) playerX = Math.max(0, playerX-5);
+  if(keys.ArrowRight) playerX = Math.min(maxX, playerX+5);
+
+  // Colisión con enemigo (solo si no está saltando)
+  if(playerY<=enemyY+150){
+    if(playerX+150>enemyX && playerX<enemyX+150){
+      if(keys.ArrowRight) playerX = enemyX-150;
+      if(keys.ArrowLeft) playerX = enemyX+150;
     }
   }
 
-  // Ataques
-  if(keys.KeyA) attack(player,enemy,10);
-  if(keys.KeyS) attack(player,enemy,20);
+  // Salto
+  if(keys.ArrowUp && !jumping){ jumping=true; jumpStart=performance.now(); }
+  if(jumping){
+    let t=(performance.now()-jumpStart)/400;
+    if(t<1) playerY=50+100*Math.sin(Math.PI*t);
+    else { playerY=50; jumping=false; }
+  }
+
+  // Ataques jugador
+  if(keys.KeyA) attack(player,enemy,5);
+  if(keys.KeyS) attack(player,enemy,15);
 
   player.style.left=playerX+"px";
   player.style.bottom=playerY+"px";
@@ -115,24 +101,35 @@ function update(timestamp){
   let dx=playerX-enemyX;
   if(Math.abs(dx)>10){
     let step=dx>0?2:-2;
-    // Colisión con jugador
-    if(!(enemyX+150+step>playerX && enemyX+step<playerX+150)){
-      enemyX+=step;
-    }
+    // No atraviesa jugador
+    if(!(enemyX+150+step>playerX && enemyX+step<playerX+150)) enemyX+=step;
   }
+
   // Ataque enemigo aleatorio
-  if(Math.random()<0.02) attack(enemy,player,10);
+  if(Math.random()<0.02) attack(enemy,player,5);
 
   enemy.style.left=enemyX+"px";
 
   // Barras de vida
-  playerHealthBar.style.width=playerHealth+"%";
-  enemyHealthBar.style.width=enemyHealth+"%";
+  document.getElementById("player-health-bar").style.width=playerHealth+"%";
+  document.getElementById("enemy-health-bar").style.width=enemyHealth+"%";
 
-  // Ganador
-  if(playerHealth<=0 || enemyHealth<=0){
-    alert(playerHealth>0?"¡Ganaste!":"¡Perdiste!");
-    location.reload();
+  // Verificar resultado combate
+  if(playerHealth<=0){
+    window.location.href="you_lost.html";
+  } else if(enemyHealth<=0){
+    // Remover enemigo de la lista restante
+    remaining = remaining.filter(c=>c.name!==currentEnemy.name);
+    sessionStorage.setItem("remainingCandidates",JSON.stringify(remaining));
+    // Si quedan más enfrentamientos en esta ronda, recargar battle.html
+    if(remaining.length>0){
+      setTimeout(()=>window.location.reload(),500);
+    } else {
+      // Siguiente ronda o ganador final
+      if(selected && remaining.length===0){
+        window.location.href="you_win.html";
+      }
+    }
   }
 
   requestAnimationFrame(update);
@@ -141,11 +138,8 @@ function update(timestamp){
 requestAnimationFrame(update);
 </script>
 
-<p style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); color:white; z-index:1;">
-Controles: ← → mover, ↑ saltar, A atacar, S especial
-</p>
-
 </body>
 </html>
+
 
 
