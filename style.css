@@ -1,6 +1,4 @@
-/* =====================
-   GENERAL
-===================== */
+/* General */
 body, html {
     margin: 0;
     padding: 0;
@@ -11,131 +9,8 @@ body, html {
     background: black;
 }
 
-/* =====================
-   VIDEO DE FONDO
-===================== */
+/* Video de fondo */
 #background-video {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:-2;
-}
-
-#overlay {
-    position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color: rgba(0,0,0,0.2);
-    z-index:-1;
-}
-
-/* =====================
-   MENÚ CENTRAL
-===================== */
-.menu-container {
-    position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-    color: #00ffea;
-}
-
-/* =====================
-   TITULO ARCADE
-===================== */
-#game-title {
-    font-size: 40px;
-    margin-bottom: 30px;
-    color: white;          /* letras blancas */
-    text-shadow: none;      /* quitar brillo */
-    animation: none;        /* sin animación */
-}
-
-@keyframes neonPulse {
-    0% { text-shadow:0 0 3px #00ffea,0 0 6px #00ffea,0 0 10px #0ff; }
-    50% { text-shadow:0 0 8px #ff00ff,0 0 16px #f0f,0 0 24px #f0f; }
-    100% { text-shadow:0 0 3px #00ffea,0 0 6px #00ffea,0 0 10px #0ff; }
-}
-
-/* =====================
-   BOTONES
-===================== */
-button, .menu-buttons button {
-    padding: 20px 60px;
-    font-size: 20px;
-    border: 3px solid #00ffea;
-    border-radius: 12px;
-    background-color: rgba(0,0,0,0.7);
-    color: #00ffea;
-    cursor: pointer;
-    text-transform: uppercase;
-    box-shadow: 0 0 10px #00ffea,0 0 20px #0ff,0 0 30px #0ff;
-    transition: all 0.3s ease-in-out;
-    margin: 10px;
-}
-
-button:hover, .menu-buttons button:hover {
-    background-color: #00ffea;
-    color: black;
-    transform: scale(1.2);
-    box-shadow: 0 0 20px #ff00ff,0 0 40px #f0f,0 0 60px #f0f;
-}
-
-/* =====================
-   TEXTO INTRODUCTORIO
-===================== */
-#intro-text {
-    margin-top: 20px;
-    font-size: 18px;
-    text-shadow: 0 0 3px #00ffea;
-}
-
-/* =====================
-   SELECCIÓN DE PERSONAJES
-===================== */
-.characters {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 30px;
-}
-
-.character {
-    background: rgba(0,0,0,0.3);
-    padding: 15px 25px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-    min-width: 180px;
-    text-align: center;
-}
-
-.character:hover {
-    background: rgba(0,255,234,0.6);
-    transform: scale(1.1);
-}
-
-.character span {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-    font-size: 16px;
-}
-
-.character p {
-    margin: 2px 0;
-    font-size: 14px;
-}
-
-/* =====================
-   TRANSICIÓN CON IMAGEN
-===================== */
-#transition-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -145,50 +20,52 @@ button:hover, .menu-buttons button:hover {
     z-index: -2;
 }
 
-.transition-container {
+/* Overlay semi-transparente */
+#overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.3);
+    z-index: -1;
+}
+
+/* Contenedor central */
+.menu-container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    color: #00ffea;
     text-align: center;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 20px;
-    text-shadow: 0 0 3px #00ffea, 0 0 6px #0ff, 0 0 10px #0ff;
+    color: white;
 }
 
-#skipBtn {
-    margin-top: 20px;
-    padding: 15px 50px;
-    font-size: 18px;
-    border: 3px solid #00ffea;
+/* Título blanco sin brillo */
+#game-title {
+    font-size: 40px;
+    margin-bottom: 30px;
+    color: white;
+    text-shadow: none;
+    animation: none;
+}
+
+/* Botones */
+button {
+    padding: 20px 60px;
+    font-size: 20px;
+    border: 3px solid white;
     border-radius: 12px;
     background-color: rgba(0,0,0,0.7);
-    color: #00ffea;
+    color: white;
     cursor: pointer;
-    box-shadow: 0 0 10px #00ffea,0 0 20px #0ff;
+    margin: 10px;
     transition: all 0.3s ease-in-out;
 }
 
-#skipBtn:hover {
-    background-color: #00ffea;
+button:hover {
+    background-color: white;
     color: black;
     transform: scale(1.1);
-    box-shadow: 0 0 20px #ff00ff,0 0 40px #f0f;
 }
 
-/* =====================
-   RESPONSIVE
-===================== */
-@media screen and (max-width: 600px) {
-    #game-title { font-size: 28px; }
-    button, .menu-buttons button { padding: 15px 40px; font-size: 16px; }
-    .character { min-width: 140px; padding: 10px 15px; }
-}
-
-        min-width: 140px;
-        padding: 10px 15px;
-    }
-}
 
