@@ -1,56 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fighting Game: Transición</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Transición de combate</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+    }
+
+    #video-transition {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
+  <video id="video-transition" autoplay>
+    <source src="videos/transicion.mp4" type="video/mp4">
+  </video>
 
-<!-- Imagen de fondo -->
-<img src="assets/images/muro.jpg" alt="Muro de ladrillos" id="transition-bg">
+  <script>
+    // Tomar personaje seleccionado
+    const selected = JSON.parse(sessionStorage.getItem("selectedCharacter"));
+    console.log("Personaje seleccionado:", selected);
 
-<div id="overlay"></div>
+    const video = document.getElementById("video-transition");
 
-<div class="transition-container">
-    <p id="transition-text"></p>
-    <button id="skipBtn">Skip</button>
-</div>
-
-<audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
-
-<script>
-// Texto que se escribirá letra por letra
-const fullText = "Tras la inesperada derrota de Pedro Castillo, Dina asumió el poder en medio de una nación dividida. Los rumores de conspiraciones, alianzas políticas y movimientos sociales comenzaron a agitar las calles. Mientras tanto, los candidatos para las próximas elecciones presidenciales de 2026 se preparan en secreto, entrenando sus estrategias y afinando sus habilidades. Cada uno busca ganar influencia y poder, pero solo uno logrará tomar el control del Palacio y definir el destino del país. La tensión crece, los rumores se convierten en noticias, y la nación observa cómo se aproxima la batalla más importante de su historia reciente: la Batalla por el Palacio.";
-
-const textContainer = document.getElementById('transition-text');
-const skipBtn = document.getElementById('skipBtn');
-const bgAudio = document.getElementById('bgAudio');
-
-let i = 0;
-
-// Función para escribir letra por letra
-function typeWriter() {
-    if (i < fullText.length) {
-        textContainer.innerHTML += fullText.charAt(i);
-        i++;
-        setTimeout(typeWriter, 40); // velocidad de escritura
-    }
-}
-
-// Iniciar audio y escritura al cargar
-window.addEventListener('load', () => {
-    bgAudio.volume = 0.5;
-    bgAudio.play().catch(() => console.log("Audio bloqueado"));
-    typeWriter();
-});
-
-// Botón skip
-skipBtn.addEventListener('click', () => {
-    window.location.href = 'main.html';
-});
-</script>
-
+    // Cuando termina el video, ir a la pantalla de combate
+    video.addEventListener("ended", () => {
+      window.location.href = "main.html"; // o la página de combate
+    });
+  </script>
 </body>
 </html>
+
