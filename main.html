@@ -8,15 +8,12 @@
 </head>
 <body>
 
-<!-- Video de fondo -->
 <video autoplay muted loop id="background-video">
-    <source src="assets/videos/palacio.mp4" type="video/mp4">
+    <source src="assets/palacio.mp4" type="video/mp4">
 </video>
 
-<!-- Overlay -->
 <div id="overlay"></div>
 
-<!-- Contenedor de menú -->
 <div class="menu-container">
     <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
     <div class="menu-buttons">
@@ -26,7 +23,6 @@
     </div>
 </div>
 
-<!-- Audio de fondo (continúa del index.html) -->
 <audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop autoplay></audio>
 
 <script>
@@ -44,9 +40,8 @@ buttons.forEach(btn => {
     btn.addEventListener('click', () => clickSound.play());
 });
 
-// Reproducir música si estaba pausada
-document.addEventListener('click', () => {
-    if(bgAudio.paused) bgAudio.play().catch(() => {});
+document.getElementById('playBtn').addEventListener('click', () => {
+    window.location.href = "select_character.html"; // va a selección de personaje
 });
 </script>
 
