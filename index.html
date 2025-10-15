@@ -3,63 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fighting Game "Batalla por el Palacio"</title>
+<title>Fighting Game: Pantalla Inicial</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Video de fondo -->
-    <video autoplay muted loop id="background-video">
-        <source src="assets/videos/palacio.mp4" type="video/mp4">
-    </video>
 
-    <!-- Overlay transparente -->
-    <div id="overlay"></div>
+<!-- Video de fondo -->
+<video autoplay muted loop id="background-video">
+    <source src="assets/videos/video_inicio.mp4" type="video/mp4">
+</video>
 
-    <!-- Contenedor del menú -->
-    <div class="menu-container">
-        <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
-        <div class="menu-buttons">
-            <button id="startBtn">Start Game</button>
-            <button onclick="openSettings()">Settings</button>
-            <button onclick="changeLanguage()">Languages</button>
-            <button onclick="showCredits()">Credits</button>
-        </div>
-    </div>
+<!-- Overlay -->
+<div id="overlay"></div>
 
-    <!-- Audio de fondo -->
-    <audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
+<!-- Contenedor central -->
+<div class="menu-container">
+    <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
+    <button id="startBtn">Start Game</button>
+    <p id="intro-text">Listo para las elecciones 2026</p>
+</div>
 
-    <script>
-        const bgAudio = document.getElementById('bgAudio');
-        const hoverSound = new Audio('assets/sounds/hover.mp3');
-        const clickSound = new Audio('assets/sounds/click.mp3');
+<!-- Audio de fondo (inactivo hasta Start Game) -->
+<audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
 
-        hoverSound.volume = 0.9;
-        clickSound.volume = 1.0;
+<script>
+const bgAudio = document.getElementById('bgAudio');
+const hoverSound = new Audio('assets/sounds/hover.mp3');
+const clickSound = new Audio('assets/sounds/click.mp3');
 
-        const buttons = document.querySelectorAll('.menu-buttons button');
+const startBtn = document.getElementById('startBtn');
 
-        buttons.forEach(btn => {
-            btn.addEventListener('mouseover', () => hoverSound.play());
-            btn.addEventListener('click', () => clickSound.play());
-        });
+hoverSound.volume = 0.8;
+clickSound.volume = 1.0;
 
-        // Reproducir audio al click del botón Start
-        document.getElementById('startBtn').addEventListener('click', () => {
-            bgAudio.volume = 0.5;
-            bgAudio.play().catch(e => console.log("Audio bloqueado"));
-            window.location.href = 'select_character.html';
-        });
+startBtn.addEventListener('mouseover', () => hoverSound.play());
 
-        // Opcional: reproducir audio si el usuario hace click en cualquier parte
-        window.addEventListener('click', () => {
-            if(bgAudio.paused) bgAudio.play().catch(() => {});
-        });
+startBtn.addEventListener('click', () => {
+    clickSound.play();
+    bgAudio.volume = 0.5;
+    bgAudio.play().catch(() => {});
+    alert("Tras la derrota de Castillo, Dina asumió el poder. Al acercarse las elecciones, los candidatos se preparan para la pelea por el Palacio.");
+    window.location.href = "main.html"; // lleva a la pantalla principal con palacio
+});
+</script>
 
-        function openSettings() { alert("Aquí se abren los ajustes"); }
-        function changeLanguage() { alert("Aquí se cambia el idioma"); }
-        function showCredits() { alert("Créditos del juego"); }
-    </script>
 </body>
 </html>
 
