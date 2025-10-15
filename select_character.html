@@ -5,40 +5,128 @@
 <title>Selecciona tu personaje</title>
 <link rel="stylesheet" href="style.css">
 <style>
-body, html { margin:0; padding:0; font-family: Arial, sans-serif; color:white; overflow:hidden; }
-#background { position: fixed; top:0; left:0; width:100%; height:100%; background:url('assets/images/plaza_San_martin.jpg') no-repeat center center; background-size:cover; z-index:-1; }
-h1 { text-align:center; margin:20px 0; font-size:36px; text-shadow:2px 2px 5px black; position:relative; z-index:1; }
-#characters-container { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px; position:relative; z-index:1; }
-.character-card { display:flex; flex-direction:column; align-items:center; }
-.character { width:120px; height:120px; object-fit:cover; cursor:pointer; border:2px solid transparent; border-radius:10px; transition: transform 0.2s, border-color 0.2s; }
-.character:hover { transform: scale(1.1); border-color: yellow; }
-.character-name { margin-top:5px; font-size:16px; color:white; text-align:center; text-shadow:1px 1px 2px black; }
+body, html { 
+  margin:0; 
+  padding:0; 
+  font-family: Arial, sans-serif; 
+  color:white; 
+  overflow:hidden; 
+}
+
+/* Fondo de la plaza */
+#background { 
+  position: fixed; 
+  top:0; left:0; 
+  width:100%; height:100%; 
+  background: url('assets/images/plaza_San_martin.jpg') no-repeat center center; 
+  background-size: cover; 
+  z-index:-1; 
+}
+
+/* Título */
+h1 { 
+  text-align:center; 
+  margin:20px 0; 
+  font-size:36px; 
+  text-shadow:2px 2px 5px black; 
+  position:relative; 
+  z-index:1; 
+}
+
+/* Contenedor de personajes */
+#characters-container { 
+  display:flex; 
+  flex-wrap:wrap; 
+  justify-content:center; 
+  gap:20px; 
+  padding:20px; 
+  position:relative; 
+  z-index:1; 
+}
+
+/* Tarjeta individual de cada personaje */
+.character-card { 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+}
+
+/* Imagen del personaje */
+.character { 
+  width:120px; 
+  height:120px; 
+  object-fit:cover; 
+  cursor:pointer; 
+  border:2px solid transparent; 
+  border-radius:10px; 
+  transition: transform 0.2s, border-color 0.2s; 
+}
+
+.character:hover { 
+  transform: scale(1.1); 
+  border-color: yellow; 
+}
+
+/* Nombre debajo de la imagen */
+.character-name { 
+  margin-top:5px; 
+  font-size:16px; 
+  color:white; 
+  text-align:center; 
+  text-shadow:1px 1px 2px black; 
+}
 </style>
 </head>
 <body>
 
+<!-- Fondo -->
 <div id="background"></div>
+
+<!-- Título -->
 <h1>Selecciona tu personaje</h1>
+
+<!-- Contenedor de personajes -->
 <div id="characters-container"></div>
 
 <script src="characters.js"></script>
 <script>
-const container=document.getElementById("characters-container");
-characters.forEach(char=>{
-  const card=document.createElement("div"); card.classList.add("character-card");
-  const img=document.createElement("img"); img.src=char.img; img.alt=char.name; img.title=char.name; img.classList.add("character");
-  const name=document.createElement("div"); name.classList.add("character-name"); name.textContent=char.name;
-  img.addEventListener("click",()=>{
-    sessionStorage.setItem("selectedCharacter",JSON.stringify(char));
-    let remaining = [...characters].filter(c=>c.name!==char.name);
-    sessionStorage.setItem("remainingCandidates",JSON.stringify(remaining));
-    window.location.href="battle.html";
+const container = document.getElementById("characters-container");
+
+// Crear tarjetas de personajes
+characters.forEach(char => {
+  const card = document.createElement("div");
+  card.classList.add("character-card");
+
+  const img = document.createElement("img");
+  img.src = char.img; // Asegúrate que char.img tenga la ruta correcta dentro de assets/images
+  img.alt = char.name;
+  img.title = char.name;
+  img.classList.add("character");
+
+  const name = document.createElement("div");
+  name.classList.add("character-name");
+  name.textContent = char.name;
+
+  // Evento clic: guardar personaje seleccionado y redirigir a battle.html
+  img.addEventListener("click", () => {
+    sessionStorage.setItem("selectedCharacter", JSON.stringify(char));
+
+    // Guardar los candidatos restantes para el torneo
+    const remaining = characters.filter(c => c.name !== char.name);
+    sessionStorage.setItem("remainingCandidates", JSON.stringify(remaining));
+
+    // Redirigir al campo de batalla
+    window.location.href = "battle.html";
   });
-  card.appendChild(img); card.appendChild(name); container.appendChild(card);
+
+  card.appendChild(img);
+  card.appendChild(name);
+  container.appendChild(card);
 });
 </script>
 
 </body>
 </html>
+
 
 
