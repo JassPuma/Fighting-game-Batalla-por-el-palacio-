@@ -3,50 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Transición narrativa</title>
-<link rel="stylesheet" href="style.css">
 <style>
-  body, html {
-    margin:0;
-    padding:0;
-    height:100%;
-    font-family: 'Sans-serif';
-    overflow:hidden;
-  }
-
-  #muro {
-    width:100%;
-    height:100%;
-    background: url('assets/images/muro_este.jpg') no-repeat center center;
-    background-size: cover;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:50px;
-    box-sizing:border-box;
-    flex-direction: column;
-  }
-
-  #narrativa {
-    font-size:28px;
-    line-height:1.5;
-    max-width:900px;
-    color: #FFFFFF;
-    text-shadow: 2px 2px 3px black;
-    margin-bottom:30px;
-  }
-
-  #skip-btn {
-    padding:10px 25px;
-    font-size:20px;
-    cursor:pointer;
-    border:none;
-    border-radius:8px;
-    background-color:darkred;
-    color:white;
-  }
-
-  #skip-btn:hover { background-color:red; }
+body, html { margin:0; padding:0; height:100%; overflow:hidden; font-family:Arial, sans-serif; }
+#muro { width:100%; height:100%; background:url('assets/images/muro_este.jpg') no-repeat center center; background-size:cover;
+display:flex; justify-content:center; align-items:center; text-align:center; flex-direction:column; padding:50px; box-sizing:border-box; }
+#narrativa { font-size:28px; line-height:1.5; max-width:900px; color:#FFFFFF; text-shadow:2px 2px 3px black; margin-bottom:30px; }
+#skip-btn { padding:10px 25px; font-size:20px; cursor:pointer; border:none; border-radius:8px; background-color:darkred; color:white; }
+#skip-btn:hover { background-color:red; }
 </style>
 </head>
 <body>
@@ -57,25 +20,16 @@
 </div>
 
 <script>
-const texto = `“Tras la inesperada caída de Pedro Castillo, el país se sumerge en un torbellino de incertidumbre. Entra Dina Boluarte, asumiendo las riendas de la nación, mientras las calles y los parlamentos vibran entre tensiones y expectativas. Cada decisión cuenta, cada movimiento puede cambiar el rumbo. Y pronto… las elecciones se acercan, prometiendo redefinir el destino del país. ¡Prepárate para vivir la política al límite!”`;
-const narrativa = document.getElementById("narrativa");
-let i = 0;
-
-function escribirLetra() {
-  if(i < texto.length){
-    narrativa.innerHTML += texto.charAt(i);
-    i++;
-    setTimeout(escribirLetra, 30);
-  }
-}
+const texto=`“Tras la inesperada caída de Pedro Castillo, el país se sumerge en un torbellino de incertidumbre. Entra Dina Boluarte, asumiendo las riendas de la nación, mientras las calles y los parlamentos vibran entre tensiones y expectativas. Cada decisión cuenta, cada movimiento puede cambiar el rumbo. Y pronto… las elecciones se acercan, prometiendo redefinir el destino del país. ¡Prepárate para vivir la política al límite!”`;
+const narrativa=document.getElementById("narrativa");
+let i=0;
+function escribirLetra(){ if(i<texto.length){ narrativa.innerHTML+=texto.charAt(i); i++; setTimeout(escribirLetra,30); } }
 escribirLetra();
-
-document.getElementById("skip-btn").addEventListener("click", () => {
-  window.location.href = "main.html";
-});
+document.getElementById("skip-btn").addEventListener("click",()=>{ window.location.href="main.html"; });
 </script>
 
 </body>
 </html>
+
 
 
