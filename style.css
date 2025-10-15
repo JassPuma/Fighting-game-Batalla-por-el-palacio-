@@ -1,147 +1,81 @@
-/* 🔹 Reinicio y configuración general */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Pantalla completa y video */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
 }
 
-html, body {
-  height: 100%;
-  width: 100%;
-  font-family: 'Poppins', Arial, sans-serif;
-  overflow: hidden;
-  background-color: black;
-}
-
-/* 🎥 Video de fondo */
+/* Video de fondo */
 #background-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -2;
+    object-fit: cover;
 }
 
-/* 🔲 Capa semitransparente sobre el video */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2); /* <- antes era 0.4 */
-  z-index: 0;
+/* Overlay oscuro */
+#overlay {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index:-1;
 }
 
-/* 🏛️ Contenido principal */
-.content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  top: 30%;
-  color: #fff;
-  animation: fadeIn 2s ease-in-out;
+/* Contenedor de menú */
+.menu-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 8px #000;
+    animation: fadeIn 1.5s ease-in-out;
 }
 
-.content h1 {
-  font-size: 4rem;
-  margin-bottom: 20px;
-  text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
-  animation: slideDown 1s ease-in-out;
+#game-title {
+    font-size: 64px;
+    margin-bottom: 40px;
+    animation: slideDown 1s ease-out;
 }
 
-.content p {
-  font-size: 1.5rem;
-  margin-bottom: 40px;
-  color: #ffefb0;
-}
-
-/* 🕹️ Botones principales */
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-}
-
-.btn {
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
-  text-decoration: none;
-  padding: 14px 35px;
-  border-radius: 12px;
-  font-size: 1.3rem;
-  letter-spacing: 1px;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  transition: all 0.3s ease-in-out;
-}
-
-.btn:hover {
-  background: #ffd700;
-  color: #000;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
-  transform: scale(1.1);
-}
-
-/* 🔈 Botón de música */
-#musicToggle {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 50;
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  font-size: 18px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-#musicToggle:hover {
-  background: rgba(255, 255, 255, 0.85);
-  color: #111;
-  transform: scale(1.1);
-}
-
-#musicToggle[aria-pressed="true"] {
-  background: linear-gradient(45deg, #ffd700, #ff8c00);
-  color: #111;
-}
-
-/* 🌟 Animaciones */
+/* Animaciones */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+    from {opacity:0;}
+    to {opacity:1;}
 }
-
 @keyframes slideDown {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+    from {transform: translateY(-50px); opacity:0;}
+    to {transform: translateY(0); opacity:1;}
 }
 
-/* 📱 Adaptación móvil */
-@media (max-width: 768px) {
-  .content h1 {
-    font-size: 2.5rem;
-  }
+/* Botones del menú */
+.menu-buttons button {
+    display: block;
+    margin: 15px auto;
+    padding: 15px 50px;
+    font-size: 26px;
+    border: none;
+    border-radius: 12px;
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
 
-  .content p {
-    font-size: 1.1rem;
-  }
-
-  .buttons {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .btn {
-    width: 80%;
-    margin: 0 auto;
-  }
+.menu-buttons button:hover {
+    background-color: rgba(255,255,255,0.3);
+    color: yellow;
+    transform: scale(1.15);
+    box-shadow: 0 0 20px gold;
 }
