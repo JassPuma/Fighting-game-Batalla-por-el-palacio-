@@ -9,7 +9,7 @@
 <body>
 
 <video autoplay muted loop id="background-video">
-    <source src="assets/video_inicio.mp4" type="video/mp4">
+    <source src="assets/videos/video_inicio.mp4" type="video/mp4">
 </video>
 
 <div id="overlay"></div>
@@ -30,13 +30,13 @@ startBtn.addEventListener('click', () => {
     bgAudio.volume = 0.5;
     bgAudio.play().catch(() => console.log("Audio bloqueado"));
     
-    alert("Tras la derrota de Castillo, Dina asumió el poder. Al acercarse las elecciones, los candidatos se preparan para la pelea por el Palacio.");
-
-    window.location.href = "main.html"; // va a pantalla principal
+    // Ir a pantalla de transición
+    window.location.href = "index_transition.html";
 });
 </script>
 
 </body>
 </html>
+
 
 
