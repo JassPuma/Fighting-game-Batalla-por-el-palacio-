@@ -1,18 +1,12 @@
-// Lista completa de 15 personajes
 const characters = [
-  { name: 'Keiko Fujimori', sprite: 'assets/images/sprites/keiko.png' },
-  { name: 'Pedro Castillo', sprite: 'assets/images/sprites/pedro.png' },
-  { name: 'Juan Velasco', sprite: 'assets/images/sprites/juan.png' },
-  { name: 'Alan García', sprite: 'assets/images/sprites/alan.png' },
-  { name: 'Ollanta Humala', sprite: 'assets/images/sprites/ollanta.png' },
-  { name: 'Susana Villarán', sprite: 'assets/images/sprites/susana.png' },
-  { name: 'Alberto Fujimori', sprite: 'assets/images/sprites/alberto.png' },
-  { name: 'Martín Vizcarra', sprite: 'assets/images/sprites/vizcarra.png' },
-  { name: 'Alejandro Toledo', sprite: 'assets/images/sprites/toledo.png' },
-  { name: 'César Acuña', sprite: 'assets/images/sprites/acuna.png' },
-  { name: 'Keiko 2', sprite: 'assets/images/sprites/keiko2.png' }, // si hay variación
-  { name: 'Rafael López Aliaga', sprite: 'assets/images/sprites/lopez_aliaga.png' },
-  { name: 'Verónika Mendoza', sprite: 'assets/images/sprites/vera.png' },
-  { name: 'Julio Guzmán', sprite: 'assets/images/sprites/julio.png' },
-  { name: 'George Forsyth', sprite: 'assets/images/sprites/george.png' }
+  { name: "Keiko Fujimori", img: "assets/images/characters/keiko.jpg" },
+  { name: "Alan García", img: "assets/images/characters/alan_garcia.jpg" },
+  { name: "Alberto Fujimori", img: "assets/images/characters/alberto_fujimori.jpg" },
+  { name: "Alejandro Toledo", img: "assets/images/characters/alejandro_toledo.jpg" },
+  { name: "César Acuña", img: "assets/images/characters/cesar_acuña.jpg" },
+  { name: "Juan Velasco Alvarado", img: "assets/images/characters/juan_velasco_alvarado.jpg" },
+  { name: "Martín Vizcarra", img: "assets/images/characters/martin_vizcarra.jpg" },
+  { name: "Ollanta Humala", img: "assets/images/characters/ollanta_humala.jpg" },
+  { name: "Pedro Castillo", img: "assets/images/characters/pedro_castillo.jpg" },
+  { name: "Susana Villarán", img: "assets/images/characters/susana_villaran.jpg" },
 ];
