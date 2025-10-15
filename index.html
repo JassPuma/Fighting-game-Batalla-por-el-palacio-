@@ -2,48 +2,55 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fighting Game: Pantalla Inicial</title>
+<title>Fighting Game</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- PANTALLA 1: INICIO -->
+  <div id="start-screen">
+    <video id="video_inicio" autoplay muted></video>
+    <div id="start-content">
+      <h1>Fighting Game</h1>
+      <button id="btnStart">Start Game</button>
+    </div>
+  </div>
 
-<!-- Video de fondo -->
-<video autoplay muted loop id="background-video">
-    <source src="assets/videos/video_inicio.mp4" type="video/mp4">
-    Tu navegador no soporta video HTML5.
-</video>
+  <!-- PANTALLA 2: TRANSICIÓN -->
+  <div id="transition-screen">
+    <img id="transition-img" src="assets/images/muro.jpg" alt="Transición">
+    <div id="transition-text">
+      <h2>Preparando batalla...</h2>
+      <button id="btnSkip">Skip</button>
+    </div>
+  </div>
 
-<!-- Overlay para mejorar visibilidad de botones -->
-<div id="overlay"></div>
+  <!-- PANTALLA 3: PALACIO / MENÚ -->
+  <div id="palacio-screen">
+    <video id="palacio-video" autoplay muted loop></video>
+    <div id="palacio-content">
+      <h1>Fighting Game - Arcade</h1>
+      <button id="btnPlay">Play</button>
+      <button id="btnExit">Exit</button>
+    </div>
+  </div>
 
-<!-- Contenedor central -->
-<div class="menu-container">
-    <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
-    <button id="startBtn">Start Game</button>
-    <p id="intro-text">Listo para las elecciones 2026</p>
-</div>
+  <!-- PANTALLA 4: SELECCIÓN DE PERSONAJE -->
+  <div id="select-screen">
+    <h2>Elige tu personaje</h2>
+    <div id="characters-container">
+      <!-- Aquí se cargarán los sprites desde characters.js -->
+    </div>
+  </div>
 
-<!-- Audio de fondo -->
-<audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
+  <!-- PANTALLA 5: JUEGO -->
+  <div id="main-game">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+  </div>
 
-<script>
-const bgAudio = document.getElementById('bgAudio');
-const startBtn = document.getElementById('startBtn');
-
-startBtn.addEventListener('click', () => {
-    // reproducir audio al hacer clic
-    bgAudio.volume = 0.5;
-    bgAudio.play().catch(() => console.log("Audio bloqueado por el navegador"));
-
-    // ir a pantalla de transición
-    window.location.href = "index_transition.html";
-});
-</script>
-
+  <script src="characters.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
-
 
 
 
