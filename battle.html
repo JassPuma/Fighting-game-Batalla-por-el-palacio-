@@ -5,122 +5,144 @@
 <title>Street Fighters: Batalla por el Palacio</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  body, html {
-    margin:0; padding:0; overflow:hidden; font-family: Arial, sans-serif;
-  }
-  #video-fondo {
-    position: fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1;
-  }
-  #battle-container {
-    position: relative; width:100%; height:100%;
-  }
-  .character {
-    width: 150px; height:150px; position:absolute; bottom:50px;
-    border:2px solid white; border-radius:10px; transition:left 0.1s, bottom 0.1s, transform 0.1s;
-  }
-  .health-bar-container {
-    position:absolute; top:20px; width:300px; height:25px; border:2px solid white; border-radius:5px;
-    background:black;
-  }
-  #player-health { left:20px; }
-  #enemy-health { right:20px; }
-  .health-bar {
-    height:100%; background:red; width:100%; border-radius:3px;
-  }
+body, html { margin:0; padding:0; overflow:hidden; font-family: Arial, sans-serif; }
+
+#video-fondo {
+  position: fixed; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: -1;
+}
+
+#battle-container {
+  position: relative; width:100%; height:100%;
+}
+
+.character {
+  width: 150px; height:150px;
+  position:absolute; bottom:50px;
+  border:2px solid white; border-radius:10px;
+  transition:left 0.05s, bottom 0.05s, transform 0.1s;
+}
+
+.health-bar-container {
+  position:absolute; top:20px; width:300px; height:25px; border:2px solid white; border-radius:5px; background:black;
+}
+
+#player-health { left:20px; }
+#enemy-health { right:20px; }
+
+.health-bar { height:100%; background:red; width:100%; border-radius:3px; }
 </style>
 </head>
 <body>
 
-<video id="video-fondo" autoplay loop muted>
+<video id="video-fondo" autoplay muted loop playsinline>
   <source src="videos/congreso.mp4" type="video/mp4">
 </video>
 
 <div id="battle-container">
-  <!-- Personajes -->
   <img id="player" class="character" src="" alt="Jugador" style="left:50px;">
-  <img id="enemy" class="character" src="assets/images/characters/ollanta_humala.jpg" alt="Enemigo" style="right:50px;">
+  <img id="enemy" class="character" src="assets/images/characters/ollanta_humala.jpg" alt="Enemigo" style="left:700px;">
 
-  <!-- Barras de vida -->
-  <div class="health-bar-container" id="player-health">
-    <div class="health-bar" id="player-health-bar"></div>
-  </div>
-  <div class="health-bar-container" id="enemy-health">
-    <div class="health-bar" id="enemy-health-bar"></div>
-  </div>
+  <div class="health-bar-container" id="player-health"><div class="health-bar" id="player-health-bar"></div></div>
+  <div class="health-bar-container" id="enemy-health"><div class="health-bar" id="enemy-health-bar"></div></div>
 </div>
 
 <script>
-const player = document.getElementById("player");
-const enemy = document.getElementById("enemy");
-const playerHealthBar = document.getElementById("player-health-bar");
-const enemyHealthBar = document.getElementById("enemy-health-bar");
+const player=document.getElementById("player");
+const enemy=document.getElementById("enemy");
+const playerHealthBar=document.getElementById("player-health-bar");
+const enemyHealthBar=document.getElementById("enemy-health-bar");
 
 // Cargar personaje seleccionado
 const selected = JSON.parse(sessionStorage.getItem("selectedCharacter"));
 if(selected) player.src = selected.img;
 
 // Posiciones y stats
-let playerX = 50, playerY = 50, playerHealth = 100;
-let enemyX = window.innerWidth - 200, enemyY = 50, enemyHealth = 100;
+let playerX=50, playerY=50, playerHealth=100;
+let enemyX=700, enemyY=50, enemyHealth=100;
+let jumping=false, jumpStart=0;
 
-// Controles de teclado
-const keys = { ArrowLeft:false, ArrowRight:false, ArrowUp:false, KeyA:false, KeyS:false };
+// Controles
+const keys={ArrowLeft:false, ArrowRight:false, ArrowUp:false, KeyA:false, KeyS:false};
 document.addEventListener("keydown", e => { if(keys.hasOwnProperty(e.code)) keys[e.code]=true; });
 document.addEventListener("keyup", e => { if(keys.hasOwnProperty(e.code)) keys[e.code]=false; });
 
-// Función actualizar posiciones y barra de vida
-function update() {
-  // Movimiento jugador
-  if(keys.ArrowLeft && playerX>0) playerX -= 5;
-  if(keys.ArrowRight && playerX<window.innerWidth-150) playerX +=5;
-  if(keys.ArrowUp) playerY = 150; else playerY = 50; // salto simple
-  if(keys.KeyA) attack(player, enemy, 10); // ataque normal
-  if(keys.KeyS) attack(player, enemy, 20); // especial
+// Función ataque
+function attack(attacker,target,damage){
+  const targetObj=target===player? {get:()=>playerHealth,set:(v)=>playerHealth=v} : {get:()=>enemyHealth,set:(v)=>enemyHealth=v};
+  // Solo daño si están cerca
+  if(Math.abs(parseInt(attacker.style.left)-parseInt(target.style.left))<160){
+    targetObj.set(Math.max(0,targetObj.get()-damage));
+    target.style.transform="translateX(-10px)";
+    setTimeout(()=>target.style.transform="translateX(0px)",100);
+  }
+}
 
-  player.style.left = playerX + "px";
-  player.style.bottom = playerY + "px";
+// Función actualizar
+function update(timestamp){
+  // Movimiento jugador
+  if(keys.ArrowLeft){
+    let newX=playerX-5;
+    if(newX+150 <= enemyX || playerY>enemyY+100) playerX=newX; // no atravesar enemigo a menos que salte sobre él
+  }
+  if(keys.ArrowRight){
+    let newX=playerX+5;
+    if(newX>=enemyX+150 || playerY>enemyY+100) playerX=newX; // no atravesar
+  }
+
+  // Salto
+  if(keys.ArrowUp && !jumping){
+    jumping=true;
+    jumpStart=performance.now();
+  }
+  if(jumping){
+    let t=(performance.now()-jumpStart)/300; // salto 300ms subir
+    if(t<1){
+      playerY=50+100*Math.sin(Math.PI*t); // movimiento de subida y bajada
+    } else {
+      playerY=50;
+      jumping=false;
+    }
+  }
+
+  // Ataques
+  if(keys.KeyA) attack(player,enemy,10);
+  if(keys.KeyS) attack(player,enemy,20);
+
+  player.style.left=playerX+"px";
+  player.style.bottom=playerY+"px";
 
   // IA enemigo simple
-  const distance = playerX - enemyX;
-  if(distance>0) enemyX += Math.min(3, distance);
-  else enemyX += Math.max(-3, distance);
-  // Ataque aleatorio
-  if(Math.random()<0.02) attack(enemy, player, 10);
-  enemy.style.left = enemyX + "px";
+  let dx=playerX-enemyX;
+  if(Math.abs(dx)>10){
+    let step=dx>0?2:-2;
+    // Colisión con jugador
+    if(!(enemyX+150+step>playerX && enemyX+step<playerX+150)){
+      enemyX+=step;
+    }
+  }
+  // Ataque enemigo aleatorio
+  if(Math.random()<0.02) attack(enemy,player,10);
 
-  // Actualizar barras
-  playerHealthBar.style.width = playerHealth + "%";
-  enemyHealthBar.style.width = enemyHealth + "%";
+  enemy.style.left=enemyX+"px";
 
-  // Revisar ganador
-  if(playerHealth <=0 || enemyHealth <=0){
-    alert(playerHealth>0 ? "¡Ganaste!" : "¡Perdiste!");
+  // Barras de vida
+  playerHealthBar.style.width=playerHealth+"%";
+  enemyHealthBar.style.width=enemyHealth+"%";
+
+  // Ganador
+  if(playerHealth<=0 || enemyHealth<=0){
+    alert(playerHealth>0?"¡Ganaste!":"¡Perdiste!");
     location.reload();
   }
 
   requestAnimationFrame(update);
 }
 
-// Función ataque
-function attack(attacker, target, damage){
-  const targetObj = target===player ? {health:()=>playerHealth, setHealth:(v)=>playerHealth=v} 
-                                    : {health:()=>enemyHealth, setHealth:(v)=>enemyHealth=v};
-  // Verificar distancia
-  const attackerX = parseInt(attacker.style.left);
-  const targetX = parseInt(target.style.left);
-  if(Math.abs(attackerX - targetX) < 150){
-    targetObj.setHealth(Math.max(0,targetObj.health()-damage));
-    // Pequeña animación
-    target.style.transform = "translateX(-10px)";
-    setTimeout(()=>target.style.transform="translateX(0px)",100);
-  }
-}
-
-update();
+requestAnimationFrame(update);
 </script>
 
 <p style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); color:white; z-index:1;">
-Controles: ← → para mover, ↑ para saltar, A para golpear, S para especial
+Controles: ← → mover, ↑ saltar, A atacar, S especial
 </p>
 
 </body>
