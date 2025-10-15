@@ -1,68 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Batalla Presidencial</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batalla por el Palacio</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+
   <!-- 🎥 Video de fondo -->
   <video autoplay muted loop id="background-video" playsinline>
     <source src="assets/videos/palacio.mp4" type="video/mp4">
     Tu navegador no soporta videos HTML5.
   </video>
 
-  <!-- 🌑 Capa oscura para contraste -->
-  <div id="overlay"></div>
+  <!-- Contenido principal -->
+  <div class="content">
+    <h1>Batalla por el Palacio</h1>
+    <p>Elige tu candidato y pelea por el poder</p>
 
-  <!-- 🕹️ Menú principal -->
-  <div class="menu-container">
-    <h1 id="game-title">🇵🇪 Batalla Presidencial</h1>
-    <div class="menu-buttons">
-      <button onclick="startGame()">Jugar</button>
-      <button onclick="openSettings()">Ajustes</button>
-      <button onclick="changeLanguage()">Idioma</button>
-      <button onclick="showCredits()">Créditos</button>
-      <button onclick="exitGame()">Salir</button>
+    <div class="buttons">
+      <a href="select_character.html" class="btn">Jugar</a>
+      <a href="game.html" class="btn">Entrar al combate</a>
     </div>
   </div>
 
-  <!-- 🔊 Sonidos -->
-  <audio id="hoverSound" src="hover.mp3"></audio>
-  <audio id="clickSound" src="click.mp3"></audio>
+  <!-- 🎵 Audio de fondo -->
+  <audio id="bgMusic" preload="auto" loop>
+    <source src="assets/sounds/condor_bossa.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio HTML5.
+  </audio>
 
-  <!-- ⚙️ Lógica del menú -->
+  <!-- 🔈 Botón para controlar la música -->
+  <button id="musicToggle" aria-pressed="false" title="Activar / desactivar música">🔈 Música</button>
+
+  <!-- 📜 Script -->
   <script>
-    const hoverSound = document.getElementById('hoverSound');
-    const clickSound = document.getElementById('clickSound');
-    const buttons = document.querySelectorAll('.menu-buttons button');
+    document.addEventListener('DOMContentLoaded', () => {
+      const bg = document.getElementById('bgMusic');
+      const btn = document.getElementById('musicToggle');
+      bg.volume = 0.25;
 
-    buttons.forEach(btn => {
-      btn.addEventListener('mouseover', () => hoverSound.play());
-      btn.addEventListener('click', () => clickSound.play());
+      // Función para intentar reproducir el audio (seguridad por bloqueo de autoplay)
+      function safePlay() {
+        bg.play().catch(e => console.log('Autoplay bloqueado, espera interacción.', e));
+      }
+
+      // Intentar reproducir al cargar
+      safePlay();
+
+      // Alternar música al hacer clic
+      btn.addEventListener('click', () => {
+        if (bg.paused) {
+          bg.play();
+          btn.textContent = '🔊 Música ON';
+          btn.setAttribute('aria-pressed', 'true');
+        } else {
+          bg.pause();
+          btn.textContent = '🔈 Música';
+          btn.setAttribute('aria-pressed', 'false');
+        }
+      });
+
+      // Si el usuario toca la pantalla, intentar reproducir (para móviles)
+      window.addEventListener('pointerdown', () => safePlay(), { once: true });
     });
-
-    function startGame() {
-      window.location.href = 'select_character.html';
-    }
-
-    function openSettings() {
-      alert("Abrir ajustes próximamente");
-    }
-
-    function changeLanguage() {
-      alert("Cambiar idioma próximamente");
-    }
-
-    function showCredits() {
-      alert("Juego creado por Jass Puma y equipo 🎮");
-    }
-
-    function exitGame() {
-      alert("Cerrando el juego...");
-    }
   </script>
+
 </body>
 </html>
