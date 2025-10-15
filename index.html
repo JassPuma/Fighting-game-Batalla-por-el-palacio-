@@ -50,7 +50,7 @@
             window.location.href = 'select_character.html';
         });
 
-        // Intentar reproducir audio al cargar (algunos navegadores bloquearán)
+        // Intentar reproducir audio al cargar
         window.addEventListener('load', () => {
             bgAudio.volume = 0.5;
             bgAudio.play().catch(e => console.log("Autoplay bloqueado"));
@@ -62,5 +62,6 @@
     </script>
 </body>
 </html>
+
 
 
