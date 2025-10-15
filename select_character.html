@@ -9,13 +9,29 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background: #111;
+      background: black;
       color: white;
+      overflow: hidden;
+    }
+
+    /* Video de fondo opcional */
+    #video-fondo {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      z-index: -1;
     }
 
     h1 {
       text-align: center;
       margin: 20px 0;
+      font-size: 36px;
+      text-shadow: 2px 2px 5px red;
+      position: relative;
+      z-index: 1;
     }
 
     #characters-container {
@@ -24,6 +40,8 @@
       justify-content: center;
       gap: 15px;
       padding: 20px;
+      position: relative;
+      z-index: 1;
     }
 
     .character {
@@ -43,6 +61,12 @@
   </style>
 </head>
 <body>
+
+  <!-- Video de fondo opcional, puedes comentar si no quieres video -->
+  <video id="video-fondo" autoplay muted loop playsinline>
+    <source src="videos/palacio.mp4" type="video/mp4">
+  </video>
+
   <h1>Selecciona tu personaje</h1>
   <div id="characters-container"></div>
 
@@ -58,10 +82,10 @@
       img.classList.add("character");
 
       img.addEventListener("click", () => {
-        // Guardar personaje seleccionado en sessionStorage para usar en la siguiente página
+        // Guardar personaje seleccionado en sessionStorage
         sessionStorage.setItem("selectedCharacter", JSON.stringify(char));
-        // Redirigir a la transición
-        window.location.href = "index_transition.html";
+        // Redirigir a la pantalla de combate
+        window.location.href = "battle.html";
       });
 
       container.appendChild(img);
