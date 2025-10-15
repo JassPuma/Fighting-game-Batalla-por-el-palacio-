@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Juego Presidencial</title>
+    <title>Batalla Presidencial</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,6 +12,9 @@
         <source src="palacio.mp4" type="video/mp4">
         Tu navegador no soporta videos HTML5.
     </video>
+
+    <!-- Overlay oscuro para resaltar botones -->
+    <div id="overlay"></div>
 
     <!-- Contenedor del menú -->
     <div class="menu-container">
@@ -25,9 +28,23 @@
         </div>
     </div>
 
+    <!-- Sonidos -->
+    <audio id="hoverSound" src="hover.mp3"></audio>
+    <audio id="clickSound" src="click.mp3"></audio>
+
     <script>
+        const hoverSound = document.getElementById('hoverSound');
+        const clickSound = document.getElementById('clickSound');
+
+        const buttons = document.querySelectorAll('.menu-buttons button');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseover', () => hoverSound.play());
+            btn.addEventListener('click', () => clickSound.play());
+        });
+
         function startGame() {
-            window.location.href = 'select_character.html'; // Abre la selección de personajes
+            window.location.href = 'select_character.html';
         }
         function openSettings() { alert("Aquí se abren los ajustes"); }
         function changeLanguage() { alert("Aquí se cambia el idioma"); }
@@ -36,3 +53,4 @@
     </script>
 </body>
 </html>
+
