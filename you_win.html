@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>You Win</title>
+<style>
+body, html { margin:0; padding:0; overflow:hidden; font-family:Arial, sans-serif; }
+#video-fondo { position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1; }
+#winner { position:absolute; top:20%; width:100%; text-align:center; color:white; text-shadow:2px 2px 4px black; }
+#winner h1 { font-size:64px; margin-bottom:20px; }
+#winner h2 { font-size:36px; }
+</style>
+</head>
+<body>
+
+<video id="video-fondo" autoplay muted loop playsinline>
+  <source src="videos/video_inicio.mp4" type="video/mp4">
+</video>
+
+<div id="winner">
+  <h1>YOU WIN</h1>
+  <h2 id="winner-name"></h2>
+</div>
+
+<script>
+let selected = JSON.parse(sessionStorage.getItem("selectedCharacter"));
+if(selected) document.getElementById("winner-name").textContent = selected.name;
+</script>
+
+</body>
+</html>
