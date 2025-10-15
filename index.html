@@ -1,81 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Street Fighters: Batalla por el Palacio</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
-
-    #video-fondo {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-
-    #menu {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: white;
-      z-index: 1;
-    }
-
-    #menu h1 {
-      font-size: 48px;
-      text-shadow: 2px 2px 5px black;
-    }
-
-    #start-btn {
-      margin-top: 20px;
-      padding: 15px 30px;
-      font-size: 24px;
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      background-color: red;
-      color: white;
-      text-shadow: 1px 1px 2px black;
-      transition: all 0.2s;
-    }
-
-    #start-btn:hover {
-      transform: scale(1.1);
-      background-color: darkred;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Street Fighters: Batalla por el Palacio</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body, html { margin:0; padding:0; overflow:hidden; font-family: Arial, sans-serif; }
+#video-fondo { position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1; }
+#menu { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:white; z-index:1; }
+#menu h1 { font-size:48px; text-shadow:2px 2px 5px black; margin-bottom:30px; }
+#start-btn { padding:15px 30px; font-size:24px; cursor:pointer; border:none; border-radius:10px; background-color:red; color:white; text-shadow:1px 1px 2px black; transition: all 0.2s; }
+#start-btn:hover { transform: scale(1.1); background-color:darkred; }
+</style>
 </head>
 <body>
 
-  <video id="video-fondo" autoplay muted loop playsinline>
-    <source src="videos/video_inicio.mp4" type="video/mp4">
-    Tu navegador no soporta video.
-  </video>
+<video id="video-fondo" autoplay muted loop playsinline>
+  <source src="videos/video_inicio.mp4" type="video/mp4">
+  Tu navegador no soporta video.
+</video>
 
-  <div id="menu">
-    <h1>Street Fighters: Batalla por el Palacio</h1>
-    <button id="start-btn">Start Game</button>
-  </div>
+<div id="menu">
+  <h1>Street Fighters: Batalla por el Palacio</h1>
+  <button id="start-btn">Start Game</button>
+</div>
 
-  <script>
-    document.getElementById("start-btn").addEventListener("click", () => {
-      window.location.href = "index_transition.html";
-    });
-  </script>
+<script>
+document.getElementById("start-btn").addEventListener("click",()=>{
+  window.location.href="index_transition.html";
+});
+</script>
 
 </body>
 </html>
+
 
 
 
