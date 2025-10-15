@@ -49,10 +49,10 @@ body, html {
     animation: none;
 }
 
-/* Botones */
-button {
-    padding: 20px 60px;
-    font-size: 20px;
+/* Botones y personajes */
+button, .character {
+    padding: 15px 50px;
+    font-size: 18px;
     border: 3px solid white;
     border-radius: 12px;
     background-color: rgba(0,0,0,0.7);
@@ -62,10 +62,17 @@ button {
     transition: all 0.3s ease-in-out;
 }
 
-button:hover {
+/* Hover */
+button:hover, .character:hover {
     background-color: white;
     color: black;
     transform: scale(1.1);
 }
+
+/* Click efecto */
+button:active, .character:active {
+    transform: scale(0.95);
+}
+
 
 
