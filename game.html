@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelea Presidencial</title>
+  <style>
+    body {
+      background-color: black;
+      overflow: hidden;
+      margin: 0;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    canvas {
+      background: linear-gradient(to bottom, #444, #111);
+      display: block;
+      margin: 20px auto;
+      border: 3px solid white;
+    }
+    #hud {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 20px;
+      text-shadow: 1px 1px 4px black;
+    }
+  </style>
+</head>
+<body>
+  <div id="hud">¡Pelea presidencial en curso! 🇵🇪</div>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const selected = localStorage.getItem('selectedCharacter') || 'alan';
+    const playerName = selected.charAt(0).toUpperCase() + selected.slice(1);
+
+    // Dibujar texto inicial
+    ctx.fillStyle = "white";
+    ctx.font = "24px Arial";
+    ctx.fillText("Jugador: " + playerName, 30, 30);
+    ctx.fillText("Presiona cualquier tecla para luchar", 250, 200);
+
+    // Jugador y enemigo representados como cuadros
+    const player = { x: 100, y: 300, color: "red", name: playerName };
+    const enemy = { x: 600, y: 300, color: "blue", name: "CPU" };
+
+    let playerLife = 100;
+    let enemyLife = 100;
+    let fightStarted = false;
+
+    document.addEventListener("keydown", () => {
+      fightStarted = true;
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Dibujar vida
+      ctx.fillStyle = "white";
+      ctx.font = "16px Arial";
+      ctx.fillText(player.name + ": " + playerLife, 30, 30);
+      ctx.fillText(enemy.name + ": " + enemyLife, 650, 30);
+
+      // Dibujar personajes
+      ctx.fillStyle = player.color;
+      ctx.fillRect(player.x, player.y - 50, 50, 50);
+
+      ctx.fillStyle = enemy.color;
+      ctx.fillRect(enemy.x, enemy.y - 50, 50, 50);
+
+      if (fightStarted) {
+        // Movimiento automático de la IA
+        if (enemy.x > player.x + 100) enemy.x -= 1;
+        else if (enemy.x < player.x + 90) enemy.x += 1;
+
+        // Simulación básica de ataque
+        if (Math.random() < 0.02) {
+          playerLife -= 5;
+        }
+      }
+
+      if (playerLife <= 0) {
+        ctx.fillStyle = "yellow";
+        ctx.font = "30px Arial";
+        ctx.fillText("¡" + enemy.name + " gana la presidencia! 🏆", 200, 200);
+        fightStarted = false;
+      }
+
+      if (enemyLife <= 0) {
+        ctx.fillStyle = "yellow";
+        ctx.font = "30px Arial";
+        ctx.fillText("¡" + player.name + " gana la presidencia! 🏆", 200, 200);
+        fightStarted = false;
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
