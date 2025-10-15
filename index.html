@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Batalla Presidencial</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
+<body>
   <!-- 🎥 Video de fondo -->
   <video autoplay muted loop id="background-video" playsinline>
     <source src="assets/videos/palacio.mp4" type="video/mp4">
     Tu navegador no soporta videos HTML5.
   </video>
 
-  <!-- 🌑 Capa oscura encima del video -->
+  <!-- 🌑 Capa oscura para contraste -->
   <div id="overlay"></div>
 
-  <!-- 🎮 Contenedor principal del menú -->
+  <!-- 🕹️ Menú principal -->
   <div class="menu-container">
     <h1 id="game-title">🇵🇪 Batalla Presidencial</h1>
     <div class="menu-buttons">
@@ -30,35 +30,40 @@
   </div>
 
   <!-- 🔊 Sonidos -->
-  <audio id="hoverSound" src="assets/audio/hover.mp3"></audio>
-  <audio id="clickSound" src="assets/audio/click.mp3"></audio>
+  <audio id="hoverSound" src="hover.mp3"></audio>
+  <audio id="clickSound" src="click.mp3"></audio>
 
-  <!-- ⚙️ Script principal -->
+  <!-- ⚙️ Lógica del menú -->
   <script>
     const hoverSound = document.getElementById('hoverSound');
     const clickSound = document.getElementById('clickSound');
     const buttons = document.querySelectorAll('.menu-buttons button');
 
     buttons.forEach(btn => {
-      btn.addEventListener('mouseover', () => {
-        hoverSound.currentTime = 0;
-        hoverSound.play();
-      });
-      btn.addEventListener('click', () => {
-        clickSound.currentTime = 0;
-        clickSound.play();
-      });
+      btn.addEventListener('mouseover', () => hoverSound.play());
+      btn.addEventListener('click', () => clickSound.play());
     });
 
     function startGame() {
-      window.location.href = "select_character.html";
+      window.location.href = 'select_character.html';
     }
-    function openSettings() { alert("Aquí se abrirán los ajustes"); }
-    function changeLanguage() { alert("Cambio de idioma pronto disponible"); }
-    function showCredits() { alert("Juego creado por el equipo de Batalla Presidencial"); }
-    function exitGame() { alert("Saliendo del juego..."); }
-  </script>
 
+    function openSettings() {
+      alert("Abrir ajustes próximamente");
+    }
+
+    function changeLanguage() {
+      alert("Cambiar idioma próximamente");
+    }
+
+    function showCredits() {
+      alert("Juego creado por Jass Puma y equipo 🎮");
+    }
+
+    function exitGame() {
+      alert("Cerrando el juego...");
+    }
+  </script>
 </body>
 </html>
 
