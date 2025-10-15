@@ -1,49 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fighting Game "Batalla por el Palacio"</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Street Fighters: Batalla por el Palacio</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body, html { margin:0; padding:0; height:100%; font-family: 'Press Start 2P', cursive; background:black; color:white; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+    h1 { font-size:36px; text-shadow: 3px 3px 0px red; margin-bottom:50px; text-align:center; }
+    .menu-btn {
+      font-size:20px;
+      padding:15px 50px;
+      margin:10px;
+      border: 2px solid red;
+      border-radius:10px;
+      background:black;
+      color:white;
+      cursor:pointer;
+      text-shadow:1px 1px 2px red;
+      transition: all 0.2s;
+    }
+    .menu-btn:hover {
+      transform: scale(1.1);
+      background:red;
+      color:black;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<video autoplay muted loop id="background-video">
-    <source src="assets/videos/palacio.mp4" type="video/mp4">
-</video>
+  <h1>Street Fighters: Batalla por el Palacio</h1>
 
-<div id="overlay"></div>
-
-<div class="menu-container">
-    <h1 id="game-title">Fighting Game<br>"Batalla por el Palacio"</h1>
-    <div class="menu-buttons">
-        <button id="playBtn">Play</button>
-        <button id="settingsBtn">Settings</button>
-        <button id="languagesBtn">Languages</button>
-    </div>
-</div>
-
-<audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop autoplay></audio>
-
-<script>
-const bgAudio = document.getElementById('bgAudio');
-const hoverSound = new Audio('assets/sounds/hover.mp3');
-const clickSound = new Audio('assets/sounds/click.mp3');
-
-hoverSound.volume = 0.8;
-clickSound.volume = 1.0;
-
-const buttons = document.querySelectorAll('.menu-buttons button');
-
-buttons.forEach(btn => {
-    btn.addEventListener('mouseover', () => hoverSound.play());
-    btn.addEventListener('click', () => clickSound.play());
-});
-
-document.getElementById('playBtn').addEventListener('click', () => {
-    window.location.href = "select_character.html";
-});
-</script>
+  <button class="menu-btn">Play</button>
+  <button class="menu-btn">Settings</button>
+  <button class="menu-btn">Exit</button>
 
 </body>
 </html>
