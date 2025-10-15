@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batalla Presidencial</title>
+    <title>Fighting Game "Batalla por el Palacio"</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
 
     <!-- Contenedor del menú -->
     <div class="menu-container">
-        <h1 id="game-title">🇵🇪 Batalla Presidencial</h1>
+        <h1 id="game-title">Fighting Game "Batalla por el Palacio"</h1>
         <div class="menu-buttons">
             <button onclick="startGame()">Play</button>
             <button onclick="openSettings()">Settings</button>
@@ -32,13 +32,13 @@
     <audio id="bgAudio" src="assets/sounds/condor_bossa.mp3" loop></audio>
 
     <script>
-        // Sonidos de hover y click
+        // Sonidos hover y click
         const hoverSound = new Audio('assets/sounds/hover.mp3');
         const clickSound = new Audio('assets/sounds/click.mp3');
 
-        // Ajuste de volumen (opcional)
-        hoverSound.volume = 0.3;
-        clickSound.volume = 0.5;
+        // Volumen ajustado
+        hoverSound.volume = 0.7;  // más fuerte
+        clickSound.volume = 0.8;  // más fuerte
 
         const buttons = document.querySelectorAll('.menu-buttons button');
         const bgAudio = document.getElementById('bgAudio');
@@ -51,7 +51,10 @@
 
         // Activar audio de fondo al primer clic del usuario
         document.addEventListener('click', () => {
-            bgAudio.play();
+            if(bgAudio.paused){
+                bgAudio.play().catch(e => console.log("Audio bloqueado por navegador:", e));
+                bgAudio.volume = 0.5; // volumen de fondo
+            }
         }, { once: true });
 
         // Funciones de botones
