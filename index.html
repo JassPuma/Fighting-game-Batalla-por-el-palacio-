@@ -12,7 +12,7 @@
         <source src="assets/videos/palacio.mp4" type="video/mp4">
     </video>
 
-    <!-- Overlay oscuro -->
+    <!-- Overlay transparente -->
     <div id="overlay"></div>
 
     <!-- Contenedor del menú -->
@@ -44,16 +44,16 @@
             btn.addEventListener('click', () => clickSound.play());
         });
 
-        // Botón Start Game
+        // Reproducir audio al click del botón Start
         document.getElementById('startBtn').addEventListener('click', () => {
-            bgAudio.play().catch(e => console.log("Audio bloqueado:", e));
+            bgAudio.volume = 0.5;
+            bgAudio.play().catch(e => console.log("Audio bloqueado"));
             window.location.href = 'select_character.html';
         });
 
-        // Intentar reproducir audio al cargar
-        window.addEventListener('load', () => {
-            bgAudio.volume = 0.5;
-            bgAudio.play().catch(e => console.log("Autoplay bloqueado"));
+        // Opcional: reproducir audio si el usuario hace click en cualquier parte
+        window.addEventListener('click', () => {
+            if(bgAudio.paused) bgAudio.play().catch(() => {});
         });
 
         function openSettings() { alert("Aquí se abren los ajustes"); }
@@ -62,6 +62,5 @@
     </script>
 </body>
 </html>
-
 
 
