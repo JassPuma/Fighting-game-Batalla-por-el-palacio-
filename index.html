@@ -1,56 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batalla Presidencial</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batalla Presidencial</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Video de fondo -->
-    <video autoplay muted loop id="background-video">
-        <source src="palacio.mp4" type="video/mp4">
-        Tu navegador no soporta videos HTML5.
-    </video>
 
-    <!-- Overlay oscuro para resaltar botones -->
-    <div id="overlay"></div>
+  <!-- 🎥 Video de fondo -->
+  <video autoplay muted loop id="background-video" playsinline>
+    <source src="assets/videos/palacio.mp4" type="video/mp4">
+    Tu navegador no soporta videos HTML5.
+  </video>
 
-    <!-- Contenedor del menú -->
-    <div class="menu-container">
-        <h1 id="game-title">🇵🇪 Batalla Presidencial</h1>
-        <div class="menu-buttons">
-            <button onclick="startGame()">Play</button>
-            <button onclick="openSettings()">Settings</button>
-            <button onclick="changeLanguage()">Languages</button>
-            <button onclick="showCredits()">Credits</button>
-            <button onclick="exitGame()">Exit</button>
-        </div>
+  <!-- 🌑 Capa oscura encima del video -->
+  <div id="overlay"></div>
+
+  <!-- 🎮 Contenedor principal del menú -->
+  <div class="menu-container">
+    <h1 id="game-title">🇵🇪 Batalla Presidencial</h1>
+    <div class="menu-buttons">
+      <button onclick="startGame()">Jugar</button>
+      <button onclick="openSettings()">Ajustes</button>
+      <button onclick="changeLanguage()">Idioma</button>
+      <button onclick="showCredits()">Créditos</button>
+      <button onclick="exitGame()">Salir</button>
     </div>
+  </div>
 
-    <!-- Sonidos -->
-    <audio id="hoverSound" src="hover.mp3"></audio>
-    <audio id="clickSound" src="click.mp3"></audio>
+  <!-- 🔊 Sonidos -->
+  <audio id="hoverSound" src="assets/audio/hover.mp3"></audio>
+  <audio id="clickSound" src="assets/audio/click.mp3"></audio>
 
-    <script>
-        const hoverSound = document.getElementById('hoverSound');
-        const clickSound = document.getElementById('clickSound');
+  <!-- ⚙️ Script principal -->
+  <script>
+    const hoverSound = document.getElementById('hoverSound');
+    const clickSound = document.getElementById('clickSound');
+    const buttons = document.querySelectorAll('.menu-buttons button');
 
-        const buttons = document.querySelectorAll('.menu-buttons button');
+    buttons.forEach(btn => {
+      btn.addEventListener('mouseover', () => {
+        hoverSound.currentTime = 0;
+        hoverSound.play();
+      });
+      btn.addEventListener('click', () => {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      });
+    });
 
-        buttons.forEach(btn => {
-            btn.addEventListener('mouseover', () => hoverSound.play());
-            btn.addEventListener('click', () => clickSound.play());
-        });
+    function startGame() {
+      window.location.href = "select_character.html";
+    }
+    function openSettings() { alert("Aquí se abrirán los ajustes"); }
+    function changeLanguage() { alert("Cambio de idioma pronto disponible"); }
+    function showCredits() { alert("Juego creado por el equipo de Batalla Presidencial"); }
+    function exitGame() { alert("Saliendo del juego..."); }
+  </script>
 
-        function startGame() {
-            window.location.href = 'select_character.html';
-        }
-        function openSettings() { alert("Aquí se abren los ajustes"); }
-        function changeLanguage() { alert("Aquí se cambia el idioma"); }
-        function showCredits() { alert("Créditos del juego"); }
-        function exitGame() { alert("Cerrando el juego..."); }
-    </script>
 </body>
 </html>
 
