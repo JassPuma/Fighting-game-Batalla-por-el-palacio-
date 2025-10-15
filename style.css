@@ -1,12 +1,16 @@
-/* 🌍 Configuración general */
-html, body {
+/* 🔹 Reinicio y configuración general */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
   height: 100%;
   width: 100%;
+  font-family: 'Poppins', Arial, sans-serif;
   overflow: hidden;
-  font-family: 'Arial', sans-serif;
-  background-color: #000;
+  background-color: black;
 }
 
 /* 🎥 Video de fondo */
@@ -14,90 +18,130 @@ html, body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  z-index: -2;
+  z-index: -1;
 }
 
-/* 🌑 Capa oscura para contraste */
-#overlay {
+/* 🔲 Capa semitransparente sobre el video */
+body::before {
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: -1;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 0;
 }
 
-/* 🕹️ Contenedor del menú principal */
-.menu-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* 🏛️ Contenido principal */
+.content {
+  position: relative;
+  z-index: 2;
   text-align: center;
-  color: white;
-  z-index: 10;
-  text-shadow: 2px 2px 6px #000;
-  animation: fadeIn 1.5s ease-in-out;
+  top: 30%;
+  color: #fff;
+  animation: fadeIn 2s ease-in-out;
 }
 
-/* 🏛️ Título del juego */
-#game-title {
-  font-size: 64px;
-  font-weight: bold;
-  color: gold;
+.content h1 {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+  animation: slideDown 1s ease-in-out;
+}
+
+.content p {
+  font-size: 1.5rem;
   margin-bottom: 40px;
-  letter-spacing: 2px;
-  animation: titlePulse 3s infinite;
+  color: #ffefb0;
 }
 
-/* ✨ Animación del título */
-@keyframes titlePulse {
-  0%, 100% { text-shadow: 0 0 10px gold, 0 0 20px orange; }
-  50% { text-shadow: 0 0 20px yellow, 0 0 40px red; }
+/* 🕹️ Botones principales */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
 }
 
-/* 🎮 Botones del menú */
-.menu-buttons button {
-  display: block;
-  margin: 15px auto;
-  padding: 15px 60px;
-  font-size: 24px;
-  border: none;
+.btn {
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 35px;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
 }
 
-/* 🌟 Efecto hover */
-.menu-buttons button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: gold;
+.btn:hover {
+  background: #ffd700;
+  color: #000;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
   transform: scale(1.1);
-  box-shadow: 0 0 20px gold, 0 0 40px yellow;
 }
 
-/* 🎬 Animaciones */
+/* 🔈 Botón de música */
+#musicToggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 50;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+#musicToggle:hover {
+  background: rgba(255, 255, 255, 0.85);
+  color: #111;
+  transform: scale(1.1);
+}
+
+#musicToggle[aria-pressed="true"] {
+  background: linear-gradient(45deg, #ffd700, #ff8c00);
+  color: #111;
+}
+
+/* 🌟 Animaciones */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, -60%); }
-  to { opacity: 1; transform: translate(-50%, -50%); }
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* 📱 Ajuste para pantallas pequeñas */
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 📱 Adaptación móvil */
 @media (max-width: 768px) {
-  #game-title {
-    font-size: 40px;
+  .content h1 {
+    font-size: 2.5rem;
   }
 
-  .menu-buttons button {
-    font-size: 18px;
-    padding: 12px 40px;
+  .content p {
+    font-size: 1.1rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn {
+    width: 80%;
+    margin: 0 auto;
   }
 }
