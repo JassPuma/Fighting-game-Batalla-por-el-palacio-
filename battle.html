@@ -6,23 +6,39 @@
 <link rel="stylesheet" href="style.css">
 <style>
 body, html {
-  margin: 0; padding: 0;
-  width: 100%; height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   font-family: Arial, sans-serif;
   overflow: hidden;
   background: black;
 }
 
 #main-game {
-  width: 100vw; height: 100vh;
+  width: 100vw;
+  height: 100vh;
   position: relative;
 }
 
-#gameCanvas {
-  width: 100%; height: 100%;
-  display: block;
+/* Video de fondo */
+#battle-video {
   position: absolute;
-  top:0; left:0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Canvas sobre el video */
+#gameCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: block;
 }
 
 /* Barras de vida y pausa */
@@ -35,7 +51,7 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 5;
+  z-index: 2;
 }
 
 .health-bar {
@@ -69,7 +85,7 @@ body, html {
   background: black;
   color: white;
   text-align: center;
-  z-index: 10;
+  z-index: 3;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,6 +103,13 @@ body, html {
 </head>
 <body>
 <div id="main-game">
+
+  <!-- Video de fondo -->
+  <video id="battle-video" autoplay muted loop playsinline>
+    <source src="assets/videos/congreso.mp4" type="video/mp4">
+  </video>
+
+  <!-- Canvas para los personajes -->
   <canvas id="gameCanvas"></canvas>
 
   <!-- Barras de vida y pausa -->
@@ -106,6 +129,7 @@ body, html {
     <div id="winner-name"></div>
     <button id="skip-win">Skip</button>
   </div>
+
 </div>
 
 <script src="characters.js"></script>
@@ -216,6 +240,8 @@ function animate(){
 animate();
 </script>
 </body>
+</html>
+
 </html>
 
 
