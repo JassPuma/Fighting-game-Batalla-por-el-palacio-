@@ -28,11 +28,9 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    // Recuperar el personaje elegido
     const selected = localStorage.getItem("selectedCharacter");
     console.log("Personaje elegido:", selected);
-
-    // Datos simples de personajes (temporal)
+   
     const characters = {
       alan: { color: "blue" },
       keiko: { color: "orange" },
@@ -57,23 +55,21 @@
     const player = { x: 100, y: 300, w: 40, h: 40, color: playerColor, vy: 0, grounded: true };
     const enemy = { x: 650, y: 300, w: 40, h: 40, color: enemyColor };
 
-    // Control de teclas
     const keys = {};
     window.addEventListener("keydown", e => keys[e.key] = true);
     window.addEventListener("keyup", e => keys[e.key] = false);
 
     function update() {
-      // Movimiento
+      
       if (keys["ArrowRight"]) player.x += 5;
       if (keys["ArrowLeft"]) player.x -= 5;
 
-      // Salto
+      
       if (keys["ArrowUp"] && player.grounded) {
         player.vy = -15;
         player.grounded = false;
       }
-
-      // Gravedad
+      
       player.vy += 0.8;
       player.y += player.vy;
 
