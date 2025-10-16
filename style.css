@@ -8,12 +8,10 @@ body, html {
   color: white;
 }
 
-/* OCULTAR TODAS LAS PANTALLAS AL INICIO */
 #transition-screen, #palacio-screen, #select-screen, #main-game {
   display: none;
 }
 
-/* ------------------ PANTALLA INICIO ------------------ */
 #start-screen {
   position: relative;
   width: 100vw;
@@ -44,7 +42,6 @@ button {
   cursor: pointer; 
 }
 
-/* ------------------ TRANSICIÓN ------------------ */
 #transition-screen {
   position: relative;
   width: 100vw;
@@ -68,7 +65,6 @@ button {
   font-size: 28px; 
 }
 
-/* ------------------ PALACIO / MENÚ ------------------ */
 #palacio-screen {
   position: relative;
   width: 100vw;
@@ -93,7 +89,6 @@ button {
   text-align: center;
 }
 
-/* ------------------ SELECCIÓN DE PERSONAJE ------------------ */
 #select-screen {
   display: none;
   width: 100vw;
@@ -145,7 +140,6 @@ button {
   text-align: center;
 }
 
-/* ------------------ JUEGO ------------------ */
 #main-game {
   display: none;
   width: 100vw;
