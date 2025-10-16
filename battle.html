@@ -15,6 +15,7 @@ body, html {
   background: black;
 }
 
+/* Contenedor principal */
 #main-game {
   width: 100vw;
   height: 100vh;
@@ -102,6 +103,7 @@ body, html {
 </style>
 </head>
 <body>
+
 <div id="main-game">
 
   <!-- Video de fondo -->
@@ -187,7 +189,7 @@ function startNextBattle(){
   if(remaining.length===0){
     document.getElementById("win-screen").style.display='flex';
     document.getElementById("winner-name").textContent=player.name;
-    setTimeout(()=>{ /* reiniciar o redirigir */ },10000);
+    setTimeout(()=>{ /* aquí puedes reiniciar o redirigir */ },10000);
   }else{
     let nextData = remaining.splice(Math.floor(Math.random()*remaining.length),1)[0];
     enemy.name = nextData.name;
@@ -213,7 +215,9 @@ function animate(){
     // Movimiento jugador
     if(keys["ArrowLeft"]) player.x = Math.max(0,player.x-player.speed);
     if(keys["ArrowRight"]) player.x = Math.min(canvas.width-player.width, player.x+player.speed);
-    if(keys[" "]) enemy.health -=1; // golpe simple
+
+    // Golpe simple
+    if(keys[" "]) enemy.health -= 1;
 
     // IA enemiga básica
     if(enemy.x > player.x + player.width) enemy.x -=2;
@@ -242,7 +246,6 @@ animate();
 </body>
 </html>
 
-</html>
 
 
 
