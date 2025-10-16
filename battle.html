@@ -2,141 +2,222 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Combate</title>
+<title>Batalla por el Palacio</title>
+<link rel="stylesheet" href="style.css">
 <style>
-body, html { margin:0; padding:0; overflow:hidden; font-family: Arial, sans-serif; }
-#video-fondo { position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1; }
-#battle-container { position:relative; width:100%; height:100%; }
-.character { width:150px; height:150px; position:absolute; bottom:50px; border:2px solid white; border-radius:10px; transition:left 0.05s, bottom 0.05s, transform 0.1s; }
-.health-bar-container { position:absolute; top:20px; width:300px; height:25px; border:2px solid white; border-radius:5px; background:black; }
-#player-health { left:20px; }
-#enemy-health { right:20px; }
-.health-bar { height:100%; background:red; width:100%; border-radius:3px; }
+body, html {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  background: black;
+}
+
+#main-game {
+  width: 100vw; height: 100vh;
+  position: relative;
+}
+
+#gameCanvas {
+  width: 100%; height: 100%;
+  display: block;
+  position: absolute;
+  top:0; left:0;
+}
+
+/* Barras de vida y pausa */
+#health-bar-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+}
+
+.health-bar {
+  width: 300px;
+  height: 20px;
+  background: red;
+  border: 2px solid black;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.health-fill {
+  height: 100%;
+  background: green;
+  width: 100%;
+  transition: width 0.2s;
+}
+
+#pause-button {
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Pantalla Win */
+#win-screen {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: white;
+  text-align: center;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#skip-win {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
+<div id="main-game">
+  <canvas id="gameCanvas"></canvas>
 
+  <!-- Barras de vida y pausa -->
+  <div id="health-bar-container">
+    <div class="health-bar">
+      <div id="player-health" class="health-fill"></div>
+    </div>
+    <button id="pause-button">PAUSE</button>
+    <div class="health-bar">
+      <div id="opponent-health" class="health-fill"></div>
+    </div>
+  </div>
 
-<div id="battle-container">
-  <img id="player" class="character" src="" alt="Jugador" style="left:50px;">
-  <img id="enemy" class="character" src="" alt="Enemigo" style="left:700px;">
-  <div class="health-bar-container" id="player-health"><div class="health-bar" id="player-health-bar"></div></div>
-  <div class="health-bar-container" id="enemy-health"><div class="health-bar" id="enemy-health-bar"></div></div>
+  <!-- Pantalla Win -->
+  <div id="win-screen">
+    <h1>YOU WIN!</h1>
+    <div id="winner-name"></div>
+    <button id="skip-win">Skip</button>
+  </div>
 </div>
 
-<p style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); color:white; z-index:1;">Controles: ← → mover, ↑ saltar, A atacar, S especial</p>
-
+<script src="characters.js"></script>
 <script>
-// Cargar personaje y candidatos
-let selected = JSON.parse(sessionStorage.getItem("selectedCharacter"));
-let remaining = JSON.parse(sessionStorage.getItem("remainingCandidates") || "[]");
+// Canvas setup
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-const player=document.getElementById("player"); player.src = selected.img;
-const enemy=document.getElementById("enemy");
+let paused = false;
+let gameOver = false;
+let remaining = JSON.parse(sessionStorage.getItem("remainingCandidates")) || [];
 
-// Selección aleatoria del enemigo
-if(remaining.length>0){
-  let idx=Math.floor(Math.random()*remaining.length);
-  enemy.src = remaining[idx].img;
-  var currentEnemy = remaining[idx];
-} else {
-  window.location.href="you_win.html";
+// Clase Fighter
+class Fighter {
+  constructor(name, img, x, y){
+    this.name = name;
+    this.img = new Image();
+    this.img.src = img;
+    this.x = x;
+    this.y = y;
+    this.width = 100;
+    this.height = 100;
+    this.health = 100;
+    this.speed = 5;
+  }
+  draw(){ ctx.drawImage(this.img,this.x,this.y,this.width,this.height); }
 }
 
-// Stats
-let playerX=50, playerY=50, playerHealth=100;
-let enemyX=700, enemyY=50, enemyHealth=100;
-let jumping=false, jumpStart=0;
+// Jugador
+const playerData = JSON.parse(sessionStorage.getItem("selectedCharacter"));
+const player = new Fighter(playerData.name, playerData.img, 100, canvas.height-150);
 
-// Controles
-const keys={ArrowLeft:false, ArrowRight:false, ArrowUp:false, KeyA:false, KeyS:false};
-document.addEventListener("keydown", e=>{ if(keys.hasOwnProperty(e.code)) keys[e.code]=true; });
-document.addEventListener("keyup", e=>{ if(keys.hasOwnProperty(e.code)) keys[e.code]=false; });
+// Enemigo inicial
+let currentEnemyData = remaining.splice(Math.floor(Math.random()*remaining.length),1)[0];
+const enemy = new Fighter(currentEnemyData.name, currentEnemyData.img, canvas.width-200, canvas.height-150);
 
-// Función ataque
-function attack(attacker,target,damage){
-  const targetObj=target===player? {get:()=>playerHealth,set:(v)=>playerHealth=v} : {get:()=>enemyHealth,set:(v)=>enemyHealth=v};
-  if(Math.abs(parseInt(attacker.style.left)-parseInt(target.style.left))<160){
-    targetObj.set(Math.max(0,targetObj.get()-damage));
-    target.style.transform="translateX(-10px)";
-    setTimeout(()=>target.style.transform="translateX(0px)",100);
+// Teclado
+const keys = {};
+window.addEventListener("keydown", e => { keys[e.key]=true; });
+window.addEventListener("keyup", e => { keys[e.key]=false; });
+
+// Pausa
+document.getElementById("pause-button").addEventListener("click", ()=>{ paused=!paused; });
+
+// Win skip
+document.getElementById("skip-win").addEventListener("click", ()=>{
+  document.getElementById("win-screen").style.display = 'none';
+  startNextBattle();
+});
+
+// Función para iniciar siguiente combate
+function startNextBattle(){
+  if(remaining.length===0){
+    document.getElementById("win-screen").style.display='flex';
+    document.getElementById("winner-name").textContent=player.name;
+    setTimeout(()=>{ /* reiniciar o redirigir */ },10000);
+  }else{
+    let nextData = remaining.splice(Math.floor(Math.random()*remaining.length),1)[0];
+    enemy.name = nextData.name;
+    enemy.img.src = nextData.img;
+    enemy.health=100;
+    player.health=100;
+    updateHealthBars();
+    gameOver=false;
   }
 }
 
-// Actualización de combate
-function update(){
-  const maxX = window.innerWidth - 150;
+// Actualizar barras
+function updateHealthBars(){
+  document.getElementById("player-health").style.width=player.health+'%';
+  document.getElementById("opponent-health").style.width=enemy.health+'%';
+}
 
-  // Movimiento jugador con límites
-  if(keys.ArrowLeft) playerX = Math.max(0, playerX-5);
-  if(keys.ArrowRight) playerX = Math.min(maxX, playerX+5);
+// Loop principal
+function animate(){
+  if(!paused && !gameOver){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // Colisión con enemigo (solo si no está saltando)
-  if(playerY<=enemyY+150){
-    if(playerX+150>enemyX && playerX<enemyX+150){
-      if(keys.ArrowRight) playerX = enemyX-150;
-      if(keys.ArrowLeft) playerX = enemyX+150;
+    // Movimiento jugador
+    if(keys["ArrowLeft"]) player.x = Math.max(0,player.x-player.speed);
+    if(keys["ArrowRight"]) player.x = Math.min(canvas.width-player.width, player.x+player.speed);
+    if(keys[" "]) enemy.health -=1; // golpe simple
+
+    // IA enemiga básica
+    if(enemy.x > player.x + player.width) enemy.x -=2;
+    if(enemy.x + enemy.width < player.x) enemy.x +=2;
+
+    // Colisión simple
+    if(player.x + player.width > enemy.x && player.x < enemy.x + enemy.width){
+      if(keys["ArrowRight"]) player.x = enemy.x - player.width;
+      if(keys["ArrowLeft"]) player.x = enemy.x + enemy.width;
+    }
+
+    player.draw();
+    enemy.draw();
+    updateHealthBars();
+
+    // Fin de combate
+    if(player.health<=0 || enemy.health<=0){
+      gameOver = true;
+      setTimeout(()=>{ startNextBattle(); },1000);
     }
   }
-
-  // Salto
-  if(keys.ArrowUp && !jumping){ jumping=true; jumpStart=performance.now(); }
-  if(jumping){
-    let t=(performance.now()-jumpStart)/400;
-    if(t<1) playerY=50+100*Math.sin(Math.PI*t);
-    else { playerY=50; jumping=false; }
-  }
-
-  // Ataques jugador
-  if(keys.KeyA) attack(player,enemy,5);
-  if(keys.KeyS) attack(player,enemy,15);
-
-  player.style.left=playerX+"px";
-  player.style.bottom=playerY+"px";
-
-  // IA enemigo simple
-  let dx=playerX-enemyX;
-  if(Math.abs(dx)>10){
-    let step=dx>0?2:-2;
-    // No atraviesa jugador
-    if(!(enemyX+150+step>playerX && enemyX+step<playerX+150)) enemyX+=step;
-  }
-
-  // Ataque enemigo aleatorio
-  if(Math.random()<0.02) attack(enemy,player,5);
-
-  enemy.style.left=enemyX+"px";
-
-  // Barras de vida
-  document.getElementById("player-health-bar").style.width=playerHealth+"%";
-  document.getElementById("enemy-health-bar").style.width=enemyHealth+"%";
-
-  // Verificar resultado combate
-  if(playerHealth<=0){
-    window.location.href="you_lost.html";
-  } else if(enemyHealth<=0){
-    // Remover enemigo de la lista restante
-    remaining = remaining.filter(c=>c.name!==currentEnemy.name);
-    sessionStorage.setItem("remainingCandidates",JSON.stringify(remaining));
-    // Si quedan más enfrentamientos en esta ronda, recargar battle.html
-    if(remaining.length>0){
-      setTimeout(()=>window.location.reload(),500);
-    } else {
-      // Siguiente ronda o ganador final
-      if(selected && remaining.length===0){
-        window.location.href="you_win.html";
-      }
-    }
-  }
-
-  requestAnimationFrame(update);
+  requestAnimationFrame(animate);
 }
-
-requestAnimationFrame(update);
+animate();
 </script>
-
 </body>
 </html>
+
 
 
 
