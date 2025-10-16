@@ -6,99 +6,100 @@
 <link rel="stylesheet" href="style.css">
 <style>
 body, html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
   font-family: Arial, sans-serif;
-  overflow: hidden;
-  background: black;
+  overflow:hidden;
+  background:black;
 }
 
 /* Contenedor principal */
 #main-game {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
+  width:100vw;
+  height:100vh;
+  position:relative;
 }
 
 /* Video de fondo */
 #battle-video {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
 }
 
 /* Canvas sobre el video */
 #gameCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  display: block;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+  display:block;
 }
 
 /* Barras de vida y pausa */
 #health-bar-container {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  height: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 2;
+  position:absolute;
+  top:10px;
+  left:10px;
+  right:10px;
+  height:40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:2;
 }
 
 .health-bar {
-  width: 300px;
-  height: 20px;
-  background: red;
-  border: 2px solid black;
-  border-radius: 5px;
-  overflow: hidden;
+  width:300px;
+  height:20px;
+  background:red;
+  border:2px solid black;
+  border-radius:5px;
+  overflow:hidden;
 }
 
 .health-fill {
-  height: 100%;
-  background: green;
-  width: 100%;
+  height:100%;
+  background:green;
+  width:100%;
   transition: width 0.2s;
 }
 
 #pause-button {
-  padding: 5px 10px;
-  font-size: 16px;
-  cursor: pointer;
+  padding:5px 10px;
+  font-size:16px;
+  cursor:pointer;
 }
 
 /* Pantalla Win */
 #win-screen {
-  display: none;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: black;
-  color: white;
-  text-align: center;
-  z-index: 3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  display:none;
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:black;
+  color:white;
+  text-align:center;
+  z-index:3;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
 }
 
 #skip-win {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
+  position:absolute;
+  top:10px;
+  right:10px;
+  padding:5px 10px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -139,8 +140,14 @@ body, html {
 // Canvas setup
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
+// Ajustar tamaño canvas igual al video
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
 let paused = false;
 let gameOver = false;
@@ -148,18 +155,21 @@ let remaining = JSON.parse(sessionStorage.getItem("remainingCandidates")) || [];
 
 // Clase Fighter
 class Fighter {
-  constructor(name, img, x, y){
+  constructor(name,imgSrc,x,y){
     this.name = name;
     this.img = new Image();
-    this.img.src = img;
+    this.img.src = imgSrc;
     this.x = x;
     this.y = y;
     this.width = 100;
     this.height = 100;
     this.health = 100;
     this.speed = 5;
+    this.img.onload = () => { this.loaded = true; }
   }
-  draw(){ ctx.drawImage(this.img,this.x,this.y,this.width,this.height); }
+  draw(){
+    if(this.loaded) ctx.drawImage(this.img,this.x,this.y,this.width,this.height);
+  }
 }
 
 // Jugador
@@ -172,15 +182,15 @@ const enemy = new Fighter(currentEnemyData.name, currentEnemyData.img, canvas.wi
 
 // Teclado
 const keys = {};
-window.addEventListener("keydown", e => { keys[e.key]=true; });
-window.addEventListener("keyup", e => { keys[e.key]=false; });
+window.addEventListener("keydown", e=>{ keys[e.key]=true; });
+window.addEventListener("keyup", e=>{ keys[e.key]=false; });
 
 // Pausa
-document.getElementById("pause-button").addEventListener("click", ()=>{ paused=!paused; });
+document.getElementById("pause-button").addEventListener("click", ()=>{ paused = !paused; });
 
 // Win skip
 document.getElementById("skip-win").addEventListener("click", ()=>{
-  document.getElementById("win-screen").style.display = 'none';
+  document.getElementById("win-screen").style.display='none';
   startNextBattle();
 });
 
@@ -203,50 +213,48 @@ function startNextBattle(){
 
 // Actualizar barras
 function updateHealthBars(){
-  document.getElementById("player-health").style.width=player.health+'%';
-  document.getElementById("opponent-health").style.width=enemy.health+'%';
+  document.getElementById("player-health").style.width = player.health+'%';
+  document.getElementById("opponent-health").style.width = enemy.health+'%';
 }
 
 // Loop principal
 function animate(){
-  if(!paused && !gameOver){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // Movimiento jugador
-    if(keys["ArrowLeft"]) player.x = Math.max(0,player.x-player.speed);
-    if(keys["ArrowRight"]) player.x = Math.min(canvas.width-player.width, player.x+player.speed);
-
-    // Golpe simple
-    if(keys[" "]) enemy.health -= 1;
-
-    // IA enemiga básica
-    if(enemy.x > player.x + player.width) enemy.x -=2;
-    if(enemy.x + enemy.width < player.x) enemy.x +=2;
-
-    // Colisión simple
-    if(player.x + player.width > enemy.x && player.x < enemy.x + enemy.width){
-      if(keys["ArrowRight"]) player.x = enemy.x - player.width;
-      if(keys["ArrowLeft"]) player.x = enemy.x + enemy.width;
-    }
-
-    player.draw();
-    enemy.draw();
-    updateHealthBars();
-
-    // Fin de combate
-    if(player.health<=0 || enemy.health<=0){
-      gameOver = true;
-      setTimeout(()=>{ startNextBattle(); },1000);
-    }
-  }
   requestAnimationFrame(animate);
+  if(paused || gameOver) return;
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Movimiento jugador
+  if(keys["ArrowLeft"]) player.x = Math.max(0, player.x-player.speed);
+  if(keys["ArrowRight"]) player.x = Math.min(canvas.width-player.width, player.x+player.speed);
+
+  // Golpe simple
+  if(keys[" "]) enemy.health = Math.max(0, enemy.health-0.5);
+
+  // IA enemiga básica
+  if(enemy.x > player.x+player.width) enemy.x -= 2;
+  if(enemy.x+enemy.width < player.x) enemy.x += 2;
+
+  // Evitar que se atraviesen
+  if(player.x + player.width > enemy.x && player.x < enemy.x + enemy.width){
+    if(keys["ArrowRight"]) player.x = enemy.x - player.width;
+    if(keys["ArrowLeft"]) player.x = enemy.x + enemy.width;
+  }
+
+  player.draw();
+  enemy.draw();
+  updateHealthBars();
+
+  // Fin de combate
+  if(player.health<=0 || enemy.health<=0){
+    gameOver=true;
+    setTimeout(()=>{ startNextBattle(); },1000);
+  }
 }
 animate();
 </script>
 </body>
 </html>
-
-
 
 
 
