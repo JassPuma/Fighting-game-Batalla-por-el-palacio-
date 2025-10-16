@@ -141,7 +141,6 @@ body, html {
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Ajustar tamaño canvas igual al video
 function resizeCanvas(){
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -159,13 +158,14 @@ class Fighter {
     this.name = name;
     this.img = new Image();
     this.img.src = imgSrc;
+    this.loaded = false;
+    this.img.onload = () => { this.loaded = true; }
     this.x = x;
     this.y = y;
     this.width = 100;
     this.height = 100;
     this.health = 100;
     this.speed = 5;
-    this.img.onload = () => { this.loaded = true; }
   }
   draw(){
     if(this.loaded) ctx.drawImage(this.img,this.x,this.y,this.width,this.height);
@@ -199,7 +199,7 @@ function startNextBattle(){
   if(remaining.length===0){
     document.getElementById("win-screen").style.display='flex';
     document.getElementById("winner-name").textContent=player.name;
-    setTimeout(()=>{ /* aquí puedes reiniciar o redirigir */ },10000);
+    setTimeout(()=>{ /* redirigir o reiniciar */ },10000);
   }else{
     let nextData = remaining.splice(Math.floor(Math.random()*remaining.length),1)[0];
     enemy.name = nextData.name;
@@ -222,6 +222,7 @@ function animate(){
   requestAnimationFrame(animate);
   if(paused || gameOver) return;
 
+  // Limpiar canvas con transparencia para ver el video
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // Movimiento jugador
@@ -241,8 +242,11 @@ function animate(){
     if(keys["ArrowLeft"]) player.x = enemy.x + enemy.width;
   }
 
+  // Dibujar personajes
   player.draw();
   enemy.draw();
+
+  // Actualizar barras
   updateHealthBars();
 
   // Fin de combate
@@ -255,6 +259,7 @@ animate();
 </script>
 </body>
 </html>
+
 
 
 
